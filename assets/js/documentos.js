@@ -571,3 +571,384 @@ splitButton.addEventListener("click", async () => {
 
 // Inicialização
 selectSplitMode("individual");
+// ==========================================
+// WORD PARA PDF
+// ==========================================
+
+const wordFile = document.getElementById("wordFile");
+const wordButton = document.getElementById("wordButton");
+
+wordFile.addEventListener("change", () => {
+    const file = wordFile.files[0];
+
+    document.getElementById("wordFileInfo").textContent =
+        file
+            ? `${file.name} • ${formatFileSize(file.size)}`
+            : "Nenhum documento selecionado.";
+
+    showMessage("wordMessage", "");
+});
+
+wordButton.addEventListener("click", async () => {
+    const file = wordFile.files[0];
+
+    if (!file) {
+        showMessage(
+            "wordMessage",
+            "Selecione um documento Word primeiro.",
+            "error"
+        );
+        return;
+    }
+
+    if (!file.name.toLowerCase().endsWith(".docx")) {
+        showMessage(
+            "wordMessage",
+            "Selecione um arquivo DOCX válido.",
+            "error"
+        );
+        return;
+    }
+
+    setButtonLoading(
+        wordButton,
+        true,
+        "Convertendo documento...",
+        "Converter para PDF"
+    );
+
+    let temporaryContainer;
+
+    try {
+        const arrayBuffer = await file.arrayBuffer();
+
+        const result = await mammoth.convertToHtml({
+            arrayBuffer
+        });
+
+        temporaryContainer = document.createElement("div");
+
+        temporaryContainer.style.width = "180mm";
+        temporaryContainer.style.padding = "15mm";
+        temporaryContainer.style.background = "#ffffff";
+        temporaryContainer.style.color = "#000000";
+        temporaryContainer.style.fontFamily = "Arial, sans-serif";
+        temporaryContainer.style.fontSize = "12pt";
+        temporaryContainer.style.lineHeight = "1.5";
+        temporaryContainer.style.position = "fixed";
+        temporaryContainer.style.left = "-10000px";
+        temporaryContainer.style.top = "0";
+
+        temporaryContainer.innerHTML = `
+            <style>
+                * {
+                    box-sizing: border-box;
+                }
+
+                p {
+                    margin: 0 0 12px;
+                }
+
+                h1, h2, h3, h4 {
+                    margin: 18px 0 10px;
+                    page-break-after: avoid;
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 12px 0;
+                }
+
+                td, th {
+                    border: 1px solid #777;
+                    padding: 6px;
+                }
+
+                img {
+                    max-width: 100%;
+                    height: auto;
+                }
+
+                ul, ol {
+                    margin-bottom: 12px;
+                }
+            </style>
+
+            ${result.value}
+        `;
+
+        document.body.appendChild(temporaryContainer);
+
+        const images = temporaryContainer.querySelectorAll("img");
+
+        for (const img of images) {
+            if (!img.complete) {
+                await new Promise(resolve => {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                });
+            }
+        }
+
+        const options = {
+            margin: 10,
+            filename: `${safeFilename(file.name)}.pdf`,
+            image: {
+                type: "jpeg",
+                quality: 0.95
+            },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: "#ffffff"
+            },
+            jsPDF: {
+                unit: "mm",
+                format: "a4",
+                orientation: "portrait"
+            },
+            pagebreak: {
+                mode: ["css", "legacy"]
+            }
+        };
+
+        await html2pdf()
+            .set(options)
+            .from(temporaryContainer)
+            .save();
+
+        showMessage(
+            "wordMessage",
+            "Documento convertido para PDF com sucesso!",
+            "success"
+        );
+
+    } catch (error) {
+        console.error("Erro na conversão Word:", error);
+
+        showMessage(
+            "wordMessage",
+            "Não foi possível converter o documento. " + error.message,
+            "error"
+        );
+
+    } finally {
+        if (temporaryContainer) {
+            temporaryContainer.remove();
+        }
+
+        setButtonLoading(
+            wordButton,
+            false,
+            "",
+            "Converter para PDF"
+        );
+    }
+});
+
+
+// ==========================================
+// COMPRIMIR PDF
+// ==========================================
+
+const compressFile = document.getElementById("compressFile");
+const compressButton = document.getElementById("compressButton");
+
+compressFile.addEventListener("change", () => {
+    const file = compressFile.files[0];
+
+    document.getElementById("compressFileInfo").textContent =
+        file
+            ? `${file.name} • ${formatFileSize(file.size)}`
+            : "Nenhum PDF selecionado.";
+
+    showMessage("compressMessage", "");
+});
+
+compressButton.addEventListener("click", async () => {
+    const file = compressFile.files[0];
+
+    if (!file) {
+        showMessage(
+            "compressMessage",
+            "Selecione um PDF primeiro.",
+            "error"
+        );
+        return;
+    }
+
+    if (!isPdf(file)) {
+        showMessage(
+            "compressMessage",
+            "Selecione um arquivo PDF válido.",
+            "error"
+        );
+        return;
+    }
+
+    const level = document.getElementById("compressionLevel").value;
+
+    const settings = {
+        high: {
+            scale: 1.8,
+            quality: 0.82
+        },
+        medium: {
+            scale: 1.3,
+            quality: 0.65
+        },
+        low: {
+            scale: 0.9,
+            quality: 0.45
+        }
+    };
+
+    const selectedSettings = settings[level];
+
+    setButtonLoading(
+        compressButton,
+        true,
+        "Comprimindo PDF...",
+        "Comprimir PDF"
+    );
+
+    try {
+        const originalBytes = await file.arrayBuffer();
+
+        const pdf = await pdfjsLib.getDocument({
+            data: new Uint8Array(originalBytes)
+        }).promise;
+
+        const outputPdf = new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4",
+            compress: true
+        });
+
+        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+
+            setButtonLoading(
+                compressButton,
+                true,
+                `Comprimindo página ${pageNumber} de ${pdf.numPages}...`,
+                "Comprimir PDF"
+            );
+
+            const page = await pdf.getPage(pageNumber);
+
+            const viewport = page.getViewport({
+                scale: selectedSettings.scale
+            });
+
+            const canvas = document.createElement("canvas");
+
+            canvas.width = Math.ceil(viewport.width);
+            canvas.height = Math.ceil(viewport.height);
+
+            const context = canvas.getContext("2d", {
+                alpha: false
+            });
+
+            context.fillStyle = "#ffffff";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            await page.render({
+                canvasContext: context,
+                viewport
+            }).promise;
+
+            const imageData = canvas.toDataURL(
+                "image/jpeg",
+                selectedSettings.quality
+            );
+
+            const pageWidth = page.view[2] - page.view[0];
+            const pageHeight = page.view[3] - page.view[1];
+
+            if (pageNumber > 1) {
+                outputPdf.addPage(
+                    [pageWidth, pageHeight],
+                    pageWidth > pageHeight ? "landscape" : "portrait"
+                );
+            } else {
+                outputPdf.deletePage(1);
+
+                outputPdf.addPage(
+                    [pageWidth, pageHeight],
+                    pageWidth > pageHeight ? "landscape" : "portrait"
+                );
+            }
+
+            outputPdf.addImage(
+                imageData,
+                "JPEG",
+                0,
+                0,
+                pageWidth,
+                pageHeight,
+                undefined,
+                "FAST"
+            );
+
+            canvas.width = 1;
+            canvas.height = 1;
+        }
+
+        const compressedBytes = outputPdf.output("arraybuffer");
+
+        const originalSize = file.size;
+        const finalSize = compressedBytes.byteLength;
+
+        const difference = originalSize - finalSize;
+
+        const percentage = originalSize > 0
+            ? ((difference / originalSize) * 100).toFixed(1)
+            : 0;
+
+        const filename =
+            `${safeFilename(file.name)}-comprimido.pdf`;
+
+        downloadFile(
+            compressedBytes,
+            filename,
+            "application/pdf"
+        );
+
+        if (difference > 0) {
+            showMessage(
+                "compressMessage",
+                `PDF comprimido! Original: ${formatFileSize(originalSize)}. ` +
+                `Novo tamanho: ${formatFileSize(finalSize)}. ` +
+                `Redução de ${percentage}%.`,
+                "success"
+            );
+        } else {
+            showMessage(
+                "compressMessage",
+                `O PDF foi processado, mas não ficou menor. Original: ${formatFileSize(originalSize)}. Resultado: ${formatFileSize(finalSize)}.`,
+                ""
+            );
+        }
+
+        await pdf.destroy();
+
+    } catch (error) {
+        console.error("Erro ao comprimir PDF:", error);
+
+        showMessage(
+            "compressMessage",
+            "Não foi possível comprimir o PDF. Verifique se ele está válido e não possui senha. " + error.message,
+            "error"
+        );
+
+    } finally {
+        setButtonLoading(
+            compressButton,
+            false,
+            "",
+            "Comprimir PDF"
+        );
+    }
+});
