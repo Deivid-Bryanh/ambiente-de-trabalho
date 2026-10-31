@@ -722,7 +722,11 @@ if (typeof html2pdfFunction !== "function") {
     throw new Error("Não foi possível carregar a biblioteca de conversão PDF.");
 }
 
-await html2pdfFunction()
+if (typeof window.html2pdf !== "function") {
+    throw new Error("A biblioteca html2pdf não foi carregada.");
+}
+
+await window.html2pdf()
     .set(options)
     .from(temporaryContainer)
     .save();
