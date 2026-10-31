@@ -4,7 +4,7 @@ import JSZip from "https://esm.sh/jszip@3.10.1";
 import { supabase } from "./supabase.js";
 
 import mammoth from "https://esm.sh/mammoth@1.9.0";
-import html2pdf from "https://esm.sh/html2pdf.js@0.10.3";
+import html2pdf from "https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.3/dist/html2pdf.bundle.min.js";
 
 import * as pdfjsLib from "https://esm.sh/pdfjs-dist@4.10.38";
 import { jsPDF } from "https://esm.sh/jspdf@2.5.2";
