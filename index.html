@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambiente de Trabalho | Login</title>
+
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body class="login-page">
+
+    <main class="login-container">
+
+        <div class="login-brand">
+            <div class="brand-icon">A</div>
+            <h1>Ambiente de Trabalho</h1>
+            <p>Organização e gestão em um só lugar.</p>
+        </div>
+
+        <form id="loginForm">
+
+            <div class="form-header">
+                <h2>Bem-vindo</h2>
+                <p>Entre com suas credenciais para continuar.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="seu@email.com"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Digite sua senha"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <p id="loginMessage" class="message"></p>
+
+            <button type="submit" id="loginButton">
+                Entrar no sistema
+            </button>
+
+        </form>
+
+        <footer>
+            Ambiente de Trabalho © 2026
+        </footer>
+
+    </main>
+
+    <script type="module" src="./assets/js/login.js"></script>
+
+</body>
+</html>
