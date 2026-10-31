@@ -4,58 +4,492 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Ambiente de Trabalho | Painel</title>
+
     <link rel="stylesheet" href="./assets/css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f4f7fb;
+            color: #172033;
+            font-family: Inter, -apple-system, BlinkMacSystemFont,
+                         "Segoe UI", sans-serif;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 28px 60px;
+        }
+
+        /* CABEÇALHO */
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2563eb;
+            color: white;
+            border-radius: 14px;
+            font-size: 23px;
+            box-shadow: 0 5px 14px rgba(37, 99, 235, 0.2);
+        }
+
+        .dashboard-header h1 {
+            margin: 0;
+            font-size: 25px;
+            font-weight: 750;
+            letter-spacing: -0.7px;
+        }
+
+        .dashboard-header p {
+            margin: 5px 0 0;
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .logout-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 17px;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            background: white;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 650;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .logout-button:hover {
+            background: #fff1f2;
+            border-color: #fecdd3;
+            color: #e11d48;
+        }
+
+        /* BOAS-VINDAS */
+
+        .welcome-card {
+            position: relative;
+            overflow: hidden;
+            padding: 35px;
+            margin-bottom: 38px;
+            border-radius: 18px;
+            background: linear-gradient(120deg, #172554, #1d4ed8);
+            color: white;
+            box-shadow: 0 10px 28px rgba(30, 64, 175, 0.15);
+        }
+
+        .welcome-card::after {
+            content: "";
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            right: -60px;
+            top: -110px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .welcome-label {
+            display: inline-block;
+            padding: 6px 10px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.10);
+            color: #dbeafe;
+            font-size: 10px;
+            font-weight: 750;
+            letter-spacing: 1.2px;
+        }
+
+        .welcome-card h2 {
+            position: relative;
+            z-index: 1;
+            margin: 0 0 10px;
+            font-size: 27px;
+            font-weight: 700;
+            letter-spacing: -0.6px;
+        }
+
+        .welcome-card p {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            color: #dbeafe;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        /* SEÇÃO DE FERRAMENTAS */
+
+        .section-heading {
+            margin-bottom: 19px;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 6px;
+            font-size: 19px;
+            font-weight: 750;
+            letter-spacing: -0.3px;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: #8290a3;
+            font-size: 13px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        /* CARTÕES */
+
+        .dashboard-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 215px;
+            padding: 25px;
+            overflow: hidden;
+            border: 1px solid #e6ebf2;
+            border-radius: 15px;
+            background: white;
+            color: inherit;
+            text-decoration: none;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.035);
+            transition: transform 0.25s, box-shadow 0.25s,
+                        border-color 0.25s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            border-color: #bfdbfe;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.09);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 23px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 23px;
+        }
+
+        .icon-blue {
+            background: #eff6ff;
+        }
+
+        .icon-purple {
+            background: #f5f3ff;
+        }
+
+        .icon-green {
+            background: #ecfdf5;
+        }
+
+        .card-number {
+            color: #cbd5e1;
+            font-size: 13px;
+            font-weight: 750;
+            letter-spacing: 1px;
+        }
+
+        .dashboard-card h3 {
+            margin: 0 0 9px;
+            color: #1e293b;
+            font-size: 18px;
+            font-weight: 750;
+        }
+
+        .dashboard-card p {
+            margin: 0;
+            color: #7b8798;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 20px;
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .card-arrow {
+            font-size: 18px;
+            transition: transform 0.2s;
+        }
+
+        .dashboard-card:hover .card-arrow {
+            transform: translateX(5px);
+        }
+
+        /* RODAPÉ */
+
+        .dashboard-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 45px;
+            padding-top: 20px;
+            border-top: 1px solid #e5eaf1;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        /* RESPONSIVIDADE */
+
+        @media (max-width: 850px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-container {
+                padding: 25px 16px 40px;
+            }
+
+            .dashboard-header {
+                align-items: flex-start;
+            }
+
+            .header-title {
+                align-items: flex-start;
+            }
+
+            .brand-icon {
+                width: 42px;
+                height: 42px;
+                flex-shrink: 0;
+            }
+
+            .dashboard-header h1 {
+                font-size: 20px;
+            }
+
+            .dashboard-header p {
+                font-size: 12px;
+            }
+
+            .logout-button {
+                padding: 10px 12px;
+            }
+
+            .welcome-card {
+                padding: 26px 22px;
+                margin-bottom: 30px;
+            }
+
+            .welcome-card h2 {
+                font-size: 22px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .dashboard-card {
+                min-height: 195px;
+                padding: 21px;
+            }
+
+            .dashboard-footer {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
     <main class="dashboard-container">
 
+        <!-- CABEÇALHO -->
+
         <header class="dashboard-header">
-            <div>
-                <h1>Ambiente de Trabalho</h1>
-                <p>Bem-vindo ao seu painel administrativo.</p>
+
+            <div class="header-title">
+
+                <div class="brand-icon">▦</div>
+
+                <div>
+                    <h1>Ambiente de Trabalho</h1>
+                    <p>Bem-vindo ao seu painel administrativo.</p>
+                </div>
+
             </div>
 
             <button id="logoutButton" class="logout-button">
+                <span>↪</span>
                 Sair
             </button>
+
         </header>
 
+        <!-- BOAS-VINDAS -->
+
         <section class="welcome-card">
-            <span>PAINEL PRINCIPAL</span>
+
+            <span class="welcome-label">PAINEL PRINCIPAL</span>
+
             <h2>Seu ambiente está pronto para começar.</h2>
+
             <p id="userEmail"></p>
+
         </section>
 
+        <!-- FERRAMENTAS -->
 
-<section class="dashboard-grid">
+        <div class="section-heading">
+            <h2>Seu espaço de trabalho</h2>
+            <p>Acesse rapidamente as ferramentas disponíveis.</p>
+        </div>
 
-    <a href="./clientes.html" class="dashboard-card">
-        <span>01</span>
-        <h3>Clientes</h3>
-        <p>Gerenciamento dos registros e informações.</p>
-    </a>
+        <section class="dashboard-grid">
 
-    <a href="./documentos.html" class="dashboard-card">
-        <span>02</span>
-        <h3>Documentos</h3>
-        <p>Conversão, compressão e organização de PDFs.</p>
-    </a>
+            <!-- CLIENTES -->
 
-    <a
-        href="https://drive.google.com/drive/folders/17NwWSCVw6uxuZH5IiI1DxRfEMjeuhZeH?usp=drive_link"
-        class="dashboard-card"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-        <span>03</span>
-        <h3>Pasta compartilhada</h3>
-        <p>Acesse e compartilhe documentos pelo Google Drive.</p>
-    </a>
-    </section>
+            <a href="./clientes.html" class="dashboard-card">
 
+                <div class="card-top">
+
+                    <div class="card-icon icon-blue">👥</div>
+
+                    <span class="card-number">01</span>
+
+                </div>
+
+                <h3>Clientes</h3>
+
+                <p>
+                    Gerencie registros, consulte informações
+                    e organize os dados dos seus clientes.
+                </p>
+
+                <div class="card-footer">
+                    Acessar clientes
+                    <span class="card-arrow">→</span>
+                </div>
+
+            </a>
+
+            <!-- DOCUMENTOS -->
+
+            <a href="./documentos.html" class="dashboard-card">
+
+                <div class="card-top">
+
+                    <div class="card-icon icon-purple">📄</div>
+
+                    <span class="card-number">02</span>
+
+                </div>
+
+                <h3>Documentos</h3>
+
+                <p>
+                    Converta, comprima, mescle e organize
+                    seus arquivos PDF.
+                </p>
+
+                <div class="card-footer">
+                    Acessar documentos
+                    <span class="card-arrow">→</span>
+                </div>
+
+            </a>
+
+            <!-- PASTA COMPARTILHADA -->
+
+            <a
+                href="https://drive.google.com/drive/folders/17NwWSCVw6uxuZH5IiI1DxRfEMjeuhZeH?usp=drive_link"
+                class="dashboard-card"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+
+                <div class="card-top">
+
+                    <div class="card-icon icon-green">📁</div>
+
+                    <span class="card-number">03</span>
+
+                </div>
+
+                <h3>Pasta compartilhada</h3>
+
+                <p>
+                    Acesse e compartilhe documentos
+                    armazenados no Google Drive.
+                </p>
+
+                <div class="card-footer">
+                    Abrir pasta
+                    <span class="card-arrow">↗</span>
+                </div>
+
+            </a>
+
+        </section>
+
+        <!-- RODAPÉ -->
+
+        <footer class="dashboard-footer">
+
+            <span>Ambiente de Trabalho</span>
+
+            <span>Organização e produtividade em um só lugar.</span>
+
+        </footer>
 
     </main>
 
