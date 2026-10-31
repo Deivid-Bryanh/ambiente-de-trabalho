@@ -713,10 +713,19 @@ wordButton.addEventListener("click", async () => {
             }
         };
 
-        await html2pdf()
-            .set(options)
-            .from(temporaryContainer)
-            .save();
+        const html2pdfFunction =
+    typeof html2pdf === "function"
+        ? html2pdf
+        : html2pdf.default;
+
+if (typeof html2pdfFunction !== "function") {
+    throw new Error("Não foi possível carregar a biblioteca de conversão PDF.");
+}
+
+await html2pdfFunction()
+    .set(options)
+    .from(temporaryContainer)
+    .save();
 
         showMessage(
             "wordMessage",
