@@ -8,85 +8,299 @@
     <link rel="stylesheet" href="./assets/css/style.css">
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f7fb;
+        }
+
         .documents-container {
-            max-width: 1150px;
-            margin: 35px auto;
-            padding: 0 20px;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 35px 24px 60px;
         }
 
         .documents-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 20px;
             margin-bottom: 30px;
         }
 
-        .documents-header a {
+        .documents-header h1 {
+            margin: 0 0 7px;
+            font-size: 29px;
+        }
+
+        .documents-header p {
+            color: #64748b;
+            margin: 0;
+        }
+
+        .back-link {
             color: #2563eb;
             text-decoration: none;
             font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .documents-banner {
+            padding: 25px;
+            border-radius: 16px;
+            background: linear-gradient(120deg, #172554, #2563eb);
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .documents-banner h2 {
+            margin: 0 0 8px;
+            font-size: 22px;
+        }
+
+        .documents-banner p {
+            margin: 0;
+            color: #dbeafe;
+            line-height: 1.6;
+        }
+
+        .section-heading {
+            margin: 32px 0 17px;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 5px;
+            font-size: 20px;
+        }
+
+        .section-heading p {
+            color: #64748b;
+            margin: 0;
+            font-size: 14px;
         }
 
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
         }
 
         .tool-card {
             background: white;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #e5eaf1;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.035);
+            min-width: 0;
+        }
+
+        .tool-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
             border-radius: 12px;
-            padding: 24px;
+            font-size: 23px;
+            margin-bottom: 17px;
         }
 
-        .tool-card h2 {
-            margin-top: 0;
-            font-size: 20px;
+        .icon-blue {
+            background: #eff6ff;
         }
 
-        .tool-card p {
+        .icon-purple {
+            background: #f5f3ff;
+        }
+
+        .icon-green {
+            background: #ecfdf5;
+        }
+
+        .tool-card h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+
+        .tool-card > p {
             color: #64748b;
-            line-height: 1.5;
-            min-height: 45px;
-        }
-
-        .tool-card input {
-            display: block;
-            width: 100%;
-            margin: 15px 0;
             font-size: 14px;
+            line-height: 1.5;
+            min-height: 42px;
+            margin: 0 0 18px;
         }
 
-        .tool-card input[type="number"],
-        .tool-card input[type="text"] {
-            box-sizing: border-box;
-            padding: 10px;
-            border: 1px solid #d1d5db;
-            border-radius: 7px;
+        .drop-area {
+            display: block;
+            padding: 20px 12px;
+            text-align: center;
+            border: 1.5px dashed #cbd5e1;
+            border-radius: 10px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .drop-area:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .drop-area strong {
+            display: block;
+            color: #334155;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .drop-area span {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .drop-area input {
+            display: none;
+        }
+
+        .file-info {
+            display: block;
+            margin-top: 10px;
+            color: #475569;
+            font-size: 12px;
+            overflow-wrap: anywhere;
         }
 
         .tool-button {
             width: 100%;
-            padding: 12px;
             border: none;
-            border-radius: 7px;
+            border-radius: 8px;
             background: #2563eb;
             color: white;
             font-weight: 600;
+            font-size: 14px;
+            padding: 12px 15px;
+            margin-top: 15px;
             cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tool-button:hover {
+            background: #1d4ed8;
         }
 
         .tool-button:disabled {
-            opacity: 0.6;
+            opacity: 0.55;
             cursor: not-allowed;
         }
 
-        .tool-message {
-            margin-top: 12px;
+        .split-section {
+            background: white;
+            border: 1px solid #e5eaf1;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.035);
+        }
+
+        .split-intro {
+            margin-bottom: 20px;
+        }
+
+        .split-intro h2 {
+            margin: 0 0 7px;
+            font-size: 21px;
+        }
+
+        .split-intro p {
+            margin: 0;
+            color: #64748b;
             font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .split-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .split-option {
+            text-align: left;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 17px;
+            background: white;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #334155;
+        }
+
+        .split-option:hover {
+            border-color: #93c5fd;
+        }
+
+        .split-option.active {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .split-option strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .split-option span {
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .split-panel {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .split-panel label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            margin: 15px 0 8px;
+        }
+
+        .split-panel input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        .split-help {
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        .split-summary {
+            padding: 12px;
+            background: #eff6ff;
+            color: #1e40af;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        .tool-message {
+            margin-top: 13px;
+            font-size: 13px;
+            line-height: 1.5;
             overflow-wrap: anywhere;
         }
 
@@ -98,18 +312,52 @@
             color: #15803d;
         }
 
-        .tool-note {
-            background: #eff6ff;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 25px;
-            color: #1e40af;
+        .privacy-note {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 17px;
+            margin-top: 25px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 11px;
+            color: #166534;
+            font-size: 13px;
             line-height: 1.5;
+        }
+
+        .privacy-note strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        @media (max-width: 850px) {
+            .tools-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
 
         @media (max-width: 600px) {
             .documents-container {
-                padding: 0 14px;
+                padding: 24px 14px 40px;
+            }
+
+            .documents-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .documents-header h1 {
+                font-size: 25px;
+            }
+
+            .tools-grid,
+            .split-options {
+                grid-template-columns: 1fr;
+            }
+
+            .split-section {
+                padding: 17px;
             }
         }
     </style>
@@ -117,90 +365,187 @@
 
 <body>
 
-    <main class="documents-container">
+<main class="documents-container">
 
-        <header class="documents-header">
-            <div>
-                <h1>Central de documentos</h1>
-                <p>Ferramentas para converter e organizar seus arquivos.</p>
-            </div>
-
-            <a href="./app.html">← Voltar ao painel</a>
-        </header>
-
-        <div class="tool-note">
-            <strong>Privacidade:</strong> nesta primeira versão, os arquivos
-            são processados localmente no navegador. Eles não são enviados
-            para o banco de dados do sistema.
+    <header class="documents-header">
+        <div>
+            <h1>Central de documentos</h1>
+            <p>Suas ferramentas para converter e organizar arquivos.</p>
         </div>
 
-        <section class="tools-grid">
+        <a class="back-link" href="./app.html">
+            ← Voltar ao painel
+        </a>
+    </header>
 
-            <article class="tool-card">
-                <h2>Imagem para PDF</h2>
-                <p>Transforme imagens JPG, PNG e outros formatos compatíveis em PDF.</p>
+    <section class="documents-banner">
+        <h2>Organize seus documentos com facilidade.</h2>
+        <p>
+            Converta imagens, una arquivos PDF e separe páginas
+            em poucos passos.
+        </p>
+    </section>
 
-                <input
-                    type="file"
-                    id="imageFiles"
-                    accept="image/*"
-                    multiple
-                >
+    <div class="section-heading">
+        <h2>Ferramentas disponíveis</h2>
+        <p>Selecione a ferramenta que deseja utilizar.</p>
+    </div>
 
-                <button class="tool-button" id="imageToPdfButton">
-                    Converter para PDF
-                </button>
+    <section class="tools-grid">
 
-                <div class="tool-message" id="imageMessage"></div>
-            </article>
+        <article class="tool-card">
+            <div class="tool-icon icon-blue">🖼️</div>
+            <h3>Imagem para PDF</h3>
+            <p>Transforme várias imagens em um único documento PDF.</p>
 
-            <article class="tool-card">
-                <h2>Mesclar PDFs</h2>
-                <p>Junte dois ou mais documentos PDF em um único arquivo.</p>
+            <label class="drop-area" for="imageFiles">
+                <strong>+ Selecionar imagens</strong>
+                <span>JPG, PNG, WebP e outros formatos de imagem</span>
+                <input type="file" id="imageFiles" accept="image/*" multiple>
+            </label>
 
-                <input
-                    type="file"
-                    id="mergeFiles"
-                    accept=".pdf,application/pdf"
-                    multiple
-                >
+            <span class="file-info" id="imageFileInfo">
+                Nenhuma imagem selecionada.
+            </span>
 
-                <button class="tool-button" id="mergeButton">
-                    Mesclar arquivos
-                </button>
+            <button class="tool-button" id="imageToPdfButton">
+                Converter para PDF
+            </button>
 
-                <div class="tool-message" id="mergeMessage"></div>
-            </article>
+            <div class="tool-message" id="imageMessage"></div>
+        </article>
 
-            <article class="tool-card">
-                <h2>Dividir PDF</h2>
-                <p>Extraia páginas específicas de um documento PDF.</p>
+        <article class="tool-card">
+            <div class="tool-icon icon-purple">📑</div>
+            <h3>Mesclar PDFs</h3>
+            <p>Una dois ou mais documentos em um único arquivo PDF.</p>
 
-                <input
-                    type="file"
-                    id="splitFile"
-                    accept=".pdf,application/pdf"
-                >
+            <label class="drop-area" for="mergeFiles">
+                <strong>+ Selecionar PDFs</strong>
+                <span>Selecione dois ou mais documentos</span>
+                <input type="file" id="mergeFiles" accept=".pdf,application/pdf" multiple>
+            </label>
 
-                <label for="pageRange">Páginas desejadas</label>
+            <span class="file-info" id="mergeFileInfo">
+                Nenhum PDF selecionado.
+            </span>
+
+            <button class="tool-button" id="mergeButton">
+                Mesclar documentos
+            </button>
+
+            <div class="tool-message" id="mergeMessage"></div>
+        </article>
+
+        <article class="tool-card">
+            <div class="tool-icon icon-green">✂️</div>
+            <h3>Dividir PDF</h3>
+            <p>Separe todas as páginas ou organize o documento por intervalos.</p>
+
+            <label class="drop-area" for="splitFile">
+                <strong>+ Selecionar PDF</strong>
+                <span>Escolha o documento que deseja dividir</span>
+                <input type="file" id="splitFile" accept=".pdf,application/pdf">
+            </label>
+
+            <span class="file-info" id="splitFileInfo">
+                Nenhum PDF selecionado.
+            </span>
+        </article>
+
+    </section>
+
+    <div class="section-heading">
+        <h2>Divisão de documentos</h2>
+        <p>Escolha como deseja separar as páginas do seu PDF.</p>
+    </div>
+
+    <section class="split-section">
+
+        <div class="split-intro">
+            <h2>Como deseja dividir o documento?</h2>
+            <p>
+                Você pode gerar um arquivo para cada página ou criar
+                vários documentos a partir de intervalos personalizados.
+            </p>
+        </div>
+
+        <div class="split-options">
+
+            <button type="button" class="split-option active"
+                    id="individualOption">
+                <strong>📄 Separar todas as páginas</strong>
+                <span>
+                    Cada página será transformada em um PDF individual.
+                    Todos os arquivos serão entregues em um ZIP.
+                </span>
+            </button>
+
+            <button type="button" class="split-option"
+                    id="rangesOption">
+                <strong>📚 Dividir por intervalos</strong>
+                <span>
+                    Defina os intervalos e gere um PDF separado
+                    para cada grupo de páginas.
+                </span>
+            </button>
+
+        </div>
+
+        <div class="split-panel">
+
+            <div id="individualDescription">
+                <strong>Separação individual</strong>
+                <p class="split-help">
+                    Exemplo: um documento de 5 páginas será transformado
+                    em 5 arquivos PDF independentes.
+                </p>
+            </div>
+
+            <div id="rangesDescription" hidden>
+                <strong>Intervalos personalizados</strong>
+
+                <label for="pageRanges">Informe os intervalos</label>
+
                 <input
                     type="text"
-                    id="pageRange"
-                    placeholder="Ex.: 1-3, 5, 8"
+                    id="pageRanges"
+                    placeholder="Ex.: 1-3, 4-7, 8-10"
                 >
 
-                <button class="tool-button" id="splitButton">
-                    Dividir PDF
-                </button>
+                <p class="split-help">
+                    Separe os intervalos por vírgula.
+                    Exemplo: 1-3, 4-7, 8-10.
+                    Cada intervalo gera um PDF independente.
+                </p>
+            </div>
 
-                <div class="tool-message" id="splitMessage"></div>
-            </article>
+            <div class="split-summary" id="splitSummary">
+                Selecione um PDF acima para começar.
+            </div>
 
-        </section>
+            <button class="tool-button" id="splitButton">
+                Separar páginas
+            </button>
 
-    </main>
+            <div class="tool-message" id="splitMessage"></div>
 
-    <script type="module" src="./assets/js/documentos.js"></script>
+        </div>
+
+    </section>
+
+    <div class="privacy-note">
+        <span>🔒</span>
+        <div>
+            <strong>Privacidade dos documentos</strong>
+            Os arquivos são processados diretamente no navegador.
+            Eles não são enviados ao banco de dados do sistema.
+        </div>
+    </div>
+
+</main>
+
+<script type="module" src="./assets/js/documentos.js"></script>
 
 </body>
 </html>
