@@ -464,6 +464,78 @@
             </span>
         </article>
 
+        <!-- WORD PARA PDF -->
+    <article class="tool-card">
+        <div class="tool-icon icon-blue">📝</div>
+
+        <h3>Word para PDF</h3>
+
+        <p>Converta documentos do Word para arquivos PDF.</p>
+
+        <div class="drop-area">
+            <strong>+ Selecionar documento Word</strong>
+            <span>Arquivos DOCX</span>
+
+            <input
+                type="file"
+                id="wordFile"
+                accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            >
+        </div>
+
+        <span class="file-info" id="wordFileInfo">
+            Nenhum documento selecionado.
+        </span>
+
+        <button class="tool-button" id="wordButton">
+            Converter para PDF
+        </button>
+
+        <div class="tool-message" id="wordMessage"></div>
+    </article>
+
+<!-- COMPRIMIR PDF -->
+    <article class="tool-card">
+        <div class="tool-icon icon-green">🗜️</div>
+
+        <h3>Comprimir PDF</h3>
+
+        <p>Reduza o tamanho dos seus documentos PDF.</p>
+
+        <div class="drop-area">
+            <strong>+ Selecionar PDF</strong>
+            <span>Escolha o documento que deseja comprimir</span>
+
+            <input
+                type="file"
+                id="compressFile"
+                accept=".pdf,application/pdf"
+            >
+        </div>
+
+        <span class="file-info" id="compressFileInfo">
+            Nenhum PDF selecionado.
+        </span>
+
+        <label for="compressionLevel" style="display:block;margin-top:15px;font-size:13px;font-weight:600;">
+            Nível de compressão
+        </label>
+
+        <select id="compressionLevel"
+            style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;margin-top:8px;">
+
+            <option value="high">Alta qualidade</option>
+            <option value="medium" selected>Equilibrada</option>
+            <option value="low">Maior compressão</option>
+        </select>
+
+        <button class="tool-button" id="compressButton">
+            Comprimir PDF
+        </button>
+
+        <div class="tool-message" id="compressMessage"></div>
+    </article>
+
     </section>
 
     <div class="section-heading">
