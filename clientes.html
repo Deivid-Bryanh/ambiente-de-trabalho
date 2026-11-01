@@ -1,38 +1,156 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clientes</title>
+    <title>Clientes | Gestão Jurídica</title>
+
     <link rel="stylesheet" href="./assets/css/style.css">
 
     <style>
-        .page-content {
-            padding: 30px;
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #142b47;
+            --accent: #3b82f6;
+            --background: #f3f6fa;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --muted: #64748b;
+            --success: #15803d;
+            --danger: #dc2626;
+            --radius: 14px;
+            --shadow: 0 4px 18px rgba(15, 23, 42, .045);
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            font-family: Inter, -apple-system, BlinkMacSystemFont,
+                "Segoe UI", sans-serif;
+        }
+
+        .page-content {
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 35px;
+        }
+
+        /* CABEÇALHO */
 
         .page-heading {
-            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
-        .client-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,.05);
+        .heading-info {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
         }
+
+        .heading-label {
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .page-heading h1 {
+            margin: 0;
+            color: var(--primary-dark);
+            font-size: 30px;
+            font-weight: 750;
+            letter-spacing: -.7px;
+        }
+
+        .page-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .heading-icon {
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e5eef9;
+            color: var(--primary);
+            border-radius: 15px;
+            font-size: 25px;
+        }
+
+        /* CARDS */
+
+        .client-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 27px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-heading {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #edf1f5;
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #edf4fc;
+            color: var(--primary);
+            border-radius: 11px;
+            font-size: 19px;
+        }
+
+        .card-heading h2 {
+            margin: 0 0 5px;
+            color: var(--primary-dark);
+            font-size: 18px;
+            font-weight: 750;
+        }
+
+        .card-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* FORMULÁRIO */
 
         .client-form {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
+            gap: 21px;
         }
 
         .field {
             display: flex;
             flex-direction: column;
-            gap: 7px;
+            gap: 8px;
+            min-width: 0;
         }
 
         .field.full {
@@ -40,98 +158,315 @@
         }
 
         .field label {
-            font-weight: 600;
-            font-size: 14px;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 650;
         }
 
         .field input,
         .field select,
         .field textarea {
             width: 100%;
-            padding: 11px 12px;
-            border: 1px solid #ddd;
-            border-radius: 7px;
-            font: inherit;
-            box-sizing: border-box;
+            min-height: 45px;
+            padding: 11px 13px;
+            border: 1px solid #dce3ec;
+            border-radius: 9px;
+            background: #fff;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border .2s, box-shadow .2s;
+        }
+
+        .field input::placeholder,
+        .field textarea::placeholder,
+        .filters input::placeholder {
+            color: #a0aaba;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, .10);
         }
 
         .field textarea {
-            min-height: 85px;
+            min-height: 100px;
             resize: vertical;
+            line-height: 1.5;
         }
+
+        /* PARCELAMENTO */
+
+        .installments-section {
+            grid-column: 1 / -1;
+            padding: 23px;
+            background: #f8fafc;
+            border: 1px solid #dfe8f2;
+            border-radius: 12px;
+        }
+
+        .installments-section h3 {
+            margin: 0 0 7px;
+            color: var(--primary-dark);
+            font-size: 17px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .installments-section > .field {
+            max-width: 420px;
+            margin-top: 17px;
+        }
+
+        .installment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .installment-item {
+            display: grid;
+            grid-template-columns: .8fr 1.2fr 1fr;
+            gap: 18px;
+            align-items: center;
+            padding: 18px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            transition: .2s ease;
+        }
+
+        .installment-item:hover {
+            border-color: #b8cdea;
+        }
+
+        .installment-item > div {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            min-width: 0;
+        }
+
+        .installment-item label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+
+        .installment-item strong {
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .installment-item input {
+            width: 100%;
+            min-width: 0;
+            height: 42px;
+            padding: 9px 11px;
+            border: 1px solid #dce3ec;
+            border-radius: 8px;
+            background: white;
+            color: var(--text);
+            font: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .installment-item input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, .10);
+        }
+
+        #installmentTotal {
+            margin: 18px 0 0;
+            padding: 15px 17px;
+            background: #edf4fc;
+            border: 1px solid #d4e4f7;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.8;
+        }
+
+        /* BOTÕES */
 
         .form-actions {
             grid-column: 1 / -1;
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 11px;
             flex-wrap: wrap;
+            padding-top: 8px;
         }
 
         .form-actions button {
-            padding: 11px 18px;
+            min-height: 44px;
+            padding: 11px 20px;
             border: 0;
-            border-radius: 7px;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
+            transition: .2s ease;
         }
 
         #saveButton {
-            background: #2563eb;
+            background: var(--primary);
             color: white;
+            box-shadow: 0 3px 8px rgba(30, 58, 95, .15);
+        }
+
+        #saveButton:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        #saveButton:disabled {
+            opacity: .6;
+            cursor: wait;
+            transform: none;
         }
 
         #cancelButton {
-            background: #e5e7eb;
-            color: #333;
+            background: #edf0f4;
+            color: #475569;
         }
+
+        #cancelButton:hover {
+            background: #e2e8f0;
+        }
+
+        /* MENSAGENS */
+
+        .message {
+            margin-top: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        #formMessage {
+            grid-column: 1 / -1;
+        }
+
+        #listMessage {
+            margin: 0 0 15px;
+            color: var(--muted);
+        }
+
+        /* PESQUISA E FILTROS */
 
         .filters {
             display: flex;
             gap: 12px;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
         .filters input,
         .filters select {
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 7px;
+            min-height: 44px;
+            padding: 10px 13px;
+            border: 1px solid #dce3ec;
+            border-radius: 9px;
+            background: #fff;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .filters input {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .filters select {
+            min-width: 180px;
+        }
+
+        .filters input:focus,
+        .filters select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, .10);
+        }
+
+        /* TABELA */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 11px;
         }
 
         .clients-table {
             width: 100%;
-            border-collapse: collapse;
-        }
-
-        .clients-table th,
-        .clients-table td {
-            padding: 13px 10px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
-            vertical-align: middle;
+            min-width: 900px;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #fff;
         }
 
         .clients-table th {
-            font-size: 13px;
-            color: #666;
+            padding: 15px 13px;
+            background: #f8fafc;
+            color: #64748b;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            font-size: 11px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            white-space: nowrap;
         }
 
+        .clients-table td {
+            padding: 15px 13px;
+            border-bottom: 1px solid #edf1f5;
+            color: #334155;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .clients-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .clients-table tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        /* STATUS */
+
         .status {
-            display: inline-block;
-            padding: 5px 9px;
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
             border-radius: 20px;
-            font-size: 12px;
-            background: #eee;
+            font-size: 11px;
+            font-weight: 750;
+            white-space: nowrap;
         }
 
         .status.em_aberto {
-            background: #fef3c7;
-            color: #92400e;
+            background: #fff4d6;
+            color: #986500;
         }
 
         .status.agendamento {
-            background: #dbeafe;
-            color: #1e40af;
+            background: #e5efff;
+            color: #2455a4;
         }
 
         .status.concluido {
@@ -139,144 +474,190 @@
             color: #166534;
         }
 
+        /* AÇÕES */
+
         .row-actions {
             display: flex;
-            gap: 7px;
+            align-items: center;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
         .row-actions button,
         .installment-action {
-            border: 0;
-            border-radius: 6px;
+            min-height: 32px;
             padding: 7px 10px;
+            border: 0;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 700;
             cursor: pointer;
+            transition: .2s ease;
         }
 
         .edit-button {
-            background: #dbeafe;
-            color: #1e40af;
+            background: #e5efff;
+            color: #2455a4;
+        }
+
+        .edit-button:hover {
+            background: #d5e5ff;
         }
 
         .delete-button {
-            background: #fee2e2;
-            color: #991b1b;
+            background: #fee9e9;
+            color: #b42323;
         }
 
-        .installments-section {
-            grid-column: 1 / -1;
+        .delete-button:hover {
+            background: #fbd5d5;
+        }
+
+        .installment-action {
+            background: #e9e8ff;
+            color: #4338a3;
+        }
+
+        .installment-action:hover {
+            background: #dcdafe;
+        }
+
+        /* DETALHES DAS PARCELAS */
+
+        .client-details-row td {
+            padding: 0 13px 18px;
             background: #f8fafc;
-            border: 1px solid #e5e7eb;
-            border-radius: 9px;
-            padding: 18px;
-        }
-
-        .installment-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .installment-item {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-            align-items: end;
-            padding: 12px;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-        }
-
-        .installment-item label {
-            display: block;
-            font-size: 12px;
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        .installment-item input {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 9px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
         }
 
         .installment-record {
             margin-top: 10px;
-            padding: 15px;
-            background: #f8fafc;
-            border-radius: 8px;
+            padding: 20px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            overflow-x: auto;
+        }
+
+        .installment-record h3 {
+            margin: 0 0 12px;
+            color: var(--primary-dark);
+            font-size: 16px;
+        }
+
+        .installment-record p {
+            color: var(--muted);
+            font-size: 13px;
         }
 
         .installment-record table {
             width: 100%;
+            min-width: 550px;
+            margin-top: 14px;
             border-collapse: collapse;
         }
 
         .installment-record th,
         .installment-record td {
-            padding: 9px;
-            border-bottom: 1px solid #e5e7eb;
+            padding: 12px;
+            border-bottom: 1px solid #edf1f5;
             text-align: left;
+            font-size: 12px;
+        }
+
+        .installment-record th {
+            color: var(--muted);
+            background: #f8fafc;
+            text-transform: uppercase;
+            font-size: 10px;
         }
 
         .paid {
-            color: #15803d;
-            font-weight: 600;
+            color: var(--success);
+            font-weight: 750;
         }
 
         .pending {
             color: #b45309;
-            font-weight: 600;
+            font-weight: 750;
         }
 
-        .installment-action {
-            background: #e0e7ff;
-            color: #3730a3;
-        }
-
-        .client-details-row td {
-            padding: 0 12px 18px;
-        }
-
-        .muted {
-            color: #777;
-            font-size: 13px;
-        }
-
-        .message {
-            margin-top: 12px;
-            font-size: 14px;
-        }
+        /* RESPONSIVIDADE */
 
         @media (max-width: 850px) {
             .page-content {
-                padding: 15px;
+                padding: 22px 16px;
+            }
+
+            .client-card {
+                padding: 21px 17px;
+            }
+
+            .installment-item {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .installment-item > div:first-child {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-heading {
+                align-items: flex-start;
+            }
+
+            .page-heading h1 {
+                font-size: 25px;
+            }
+
+            .heading-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 21px;
             }
 
             .client-form {
                 grid-template-columns: 1fr;
+                gap: 17px;
             }
 
             .field.full,
             .form-actions,
-            .installments-section {
+            .installments-section,
+            #formMessage {
                 grid-column: 1;
+            }
+
+            .card-heading {
+                align-items: flex-start;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filters input,
+            .filters select {
+                width: 100%;
+                min-width: 0;
             }
 
             .installment-item {
                 grid-template-columns: 1fr;
+                gap: 14px;
             }
 
-            .table-wrapper {
-                overflow-x: auto;
+            .installment-item > div:first-child {
+                grid-column: auto;
             }
 
-            .clients-table {
-                min-width: 850px;
+            .installments-section {
+                padding: 17px;
+            }
+
+            .form-actions button {
+                flex: 1;
             }
         }
     </style>
@@ -285,20 +666,38 @@
 <body>
     <div class="page-content">
 
-        <div class="page-heading">
-            <h1>Clientes</h1>
-            <p>Gerencie seus clientes, processos e honorários.</p>
-        </div>
+        <!-- CABEÇALHO -->
+
+        <header class="page-heading">
+            <div class="heading-info">
+                <span class="heading-label">GESTÃO JURÍDICA</span>
+                <h1>Clientes</h1>
+                <p>Gerencie clientes, processos e honorários em um só lugar.</p>
+            </div>
+
+            <div class="heading-icon">♙</div>
+        </header>
+
+        <!-- CADASTRO -->
 
         <section class="client-card">
-            <h2 id="formTitle">Cadastrar cliente</h2>
+
+            <div class="card-heading">
+                <div class="card-icon">＋</div>
+                <div>
+                    <h2 id="formTitle">Cadastrar cliente</h2>
+                    <p>Preencha as informações para registrar um cliente.</p>
+                </div>
+            </div>
 
             <form id="clientForm" class="client-form">
+
                 <input type="hidden" id="clientId">
 
                 <div class="field">
                     <label for="nome">Nome completo *</label>
-                    <input type="text" id="nome" required>
+                    <input type="text" id="nome"
+                           placeholder="Digite o nome completo" required>
                 </div>
 
                 <div class="field">
@@ -310,7 +709,7 @@
                 <div class="field">
                     <label for="numeroProcesso">Número do processo</label>
                     <input type="text" id="numeroProcesso"
-                           placeholder="Ex.: 0000000-00.0000.0.00.0000">
+                           placeholder="0000000-00.0000.0.00.0000">
                 </div>
 
                 <div class="field">
@@ -321,11 +720,12 @@
 
                 <div class="field">
                     <label for="caso">Tipo de caso *</label>
-                    <input type="text" id="caso" required>
+                    <input type="text" id="caso"
+                           placeholder="Ex.: Direito civil" required>
                 </div>
 
                 <div class="field">
-                    <label for="status">Status</label>
+                    <label for="status">Status do atendimento</label>
                     <select id="status">
                         <option value="em_aberto">Em aberto</option>
                         <option value="agendamento">Agendamento</option>
@@ -335,13 +735,17 @@
 
                 <div class="field full">
                     <label for="descricao">Descrição do caso</label>
-                    <textarea id="descricao"></textarea>
+                    <textarea id="descricao"
+                              placeholder="Descreva os detalhes do caso..."></textarea>
                 </div>
 
                 <div class="field full">
                     <label for="observacoes">Observações</label>
-                    <textarea id="observacoes"></textarea>
+                    <textarea id="observacoes"
+                              placeholder="Adicione informações complementares..."></textarea>
                 </div>
+
+                <!-- HONORÁRIOS -->
 
                 <div class="field">
                     <label for="honorarios">Honorários (R$)</label>
@@ -358,35 +762,43 @@
                     </select>
                 </div>
 
+                <!-- PARCELAMENTO -->
+
                 <div id="installmentsSection"
                      class="installments-section"
                      style="display:none;">
 
                     <h3>Parcelamento dos honorários</h3>
+
                     <p class="muted">
-                        O sistema dividirá o valor automaticamente.
-                        Você poderá ajustar o valor de cada parcela.
+                        Configure a quantidade e o vencimento.
+                        A divisão dos valores será calculada automaticamente.
                     </p>
 
                     <div class="field">
                         <label for="quantidadeParcelas">
                             Quantidade de parcelas
                         </label>
+
                         <input type="number" id="quantidadeParcelas"
                                min="1" max="120" value="2">
                     </div>
 
-                    <div class="field" style="margin-top:12px;">
+                    <div class="field" style="margin-top:15px;">
                         <label for="primeiroVencimento">
                             Mês da primeira parcela
                         </label>
+
                         <input type="month" id="primeiroVencimento">
                     </div>
 
-                    <div id="installmentList" class="installment-list"></div>
+                    <div id="installmentList"
+                         class="installment-list"></div>
 
                     <p id="installmentTotal" class="muted"></p>
                 </div>
+
+                <!-- AÇÕES -->
 
                 <div class="form-actions">
                     <button type="submit" id="saveButton">
@@ -401,15 +813,28 @@
 
                 <div id="formMessage"
                      class="message field full"></div>
+
             </form>
         </section>
 
+        <!-- LISTAGEM -->
+
         <section class="client-card">
-            <h2>Clientes cadastrados</h2>
+
+            <div class="card-heading">
+                <div class="card-icon">▤</div>
+                <div>
+                    <h2>Clientes cadastrados</h2>
+                    <p>Consulte, pesquise e gerencie os registros.</p>
+                </div>
+            </div>
+
+            <!-- FILTROS -->
 
             <div class="filters">
+
                 <input type="text" id="searchInput"
-                       placeholder="Pesquisar por nome, CPF ou processo">
+                       placeholder="⌕  Pesquisar por nome, CPF ou processo">
 
                 <select id="filterStatus">
                     <option value="">Todos os status</option>
@@ -417,12 +842,17 @@
                     <option value="agendamento">Agendamento</option>
                     <option value="concluido">Concluído</option>
                 </select>
+
             </div>
 
             <div id="listMessage" class="message"></div>
 
+            <!-- TABELA -->
+
             <div class="table-wrapper">
+
                 <table class="clients-table">
+
                     <thead>
                         <tr>
                             <th>Nome</th>
@@ -436,7 +866,9 @@
                     </thead>
 
                     <tbody id="clientsList"></tbody>
+
                 </table>
+
             </div>
         </section>
 
