@@ -660,6 +660,51 @@
                 flex: 1;
             }
         }
+        
+/* BOTÃO VOLTAR */
+
+    .heading-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .back-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 17px;
+        background: #ffffff;
+        color: #1e3a5f;
+        border: 1px solid #dce3ec;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s ease;
+    }
+
+    .back-button:hover {
+        background: #edf4fc;
+        border-color: #b8cdea;
+        transform: translateY(-1px);
+    }
+
+    .back-button span {
+        font-size: 18px;
+    }
+
+    @media (max-width: 600px) {
+        .heading-actions {
+            gap: 8px;
+        }
+
+        .back-button {
+            padding: 9px 12px;
+            font-size: 12px;
+        }
+    }
+
     </style>
 </head>
 
@@ -668,15 +713,24 @@
 
         <!-- CABEÇALHO -->
 
-        <header class="page-heading">
-            <div class="heading-info">
-                <span class="heading-label">GESTÃO JURÍDICA</span>
-                <h1>Clientes</h1>
-                <p>Gerencie clientes, processos e honorários em um só lugar.</p>
-            </div>
+        
+    <header class="page-heading">
+        <div class="heading-info">
+            <span class="heading-label">GESTÃO JURÍDICA</span>
+            <h1>Clientes</h1>
+            <p>Gerencie clientes, processos e honorários em um só lugar.</p>
+        </div>
+
+        <div class="heading-actions">
+            <button type="button" class="back-button"
+                    onclick="window.location.href='app.html'">
+                <span>←</span> Voltar
+            </button>
 
             <div class="heading-icon">♙</div>
-        </header>
+        </div>
+    </header>
+
 
         <!-- CADASTRO -->
 
