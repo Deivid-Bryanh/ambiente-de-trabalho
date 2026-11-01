@@ -628,7 +628,6 @@ async function togglePayment(id, currentlyPaid, clientId) {
     }
 
     await showClientInstallments(clientId);
-    await showClientInstallments(clientId);
 }
 
 clientForm.addEventListener("submit", async event => {
@@ -704,7 +703,21 @@ clientForm.addEventListener("submit", async event => {
         }
     }
 
+    const { data: authData, error: authError } =
+        await supabase.auth.getUser();
+
+    if (authError || !authData.user) {
+        showMessage(
+            formMessage,
+            "Sua sessão expirou. Entre novamente.",
+            true
+        );
+        return;
+    }
+
     const clientData = {
+        user_id: authData.user.id,
+
         nome: document.getElementById("nome").value.trim(),
         cpf,
         numero_processo:
