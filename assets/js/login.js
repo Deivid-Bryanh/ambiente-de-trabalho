@@ -1,4 +1,3 @@
-
 import { supabase } from "./supabase.js";
 
 const loginForm = document.getElementById("loginForm");
@@ -6,10 +5,24 @@ const loginButton = document.getElementById("loginButton");
 const loginMessage = document.getElementById("loginMessage");
 
 // Verificar se já existe uma sessão
-const { data: { session } } = await supabase.auth.getSession();
+async function checkSession() {
+    try {
+        const {
+            data: { session },
+            error
+        } = await supabase.auth.getSession();
 
-if (session) {
-    window.location.replace("./app.html");
+        if (error) {
+            console.error("Erro ao verificar sessão:", error);
+            return;
+        }
+
+        if (session) {
+            window.location.replace("./app.html");
+        }
+    } catch (error) {
+        console.error("Erro inesperado:", error);
+    }
 }
 
 // Realizar login
@@ -21,22 +34,39 @@ loginForm.addEventListener("submit", async (event) => {
 
     loginButton.disabled = true;
     loginButton.textContent = "Verificando...";
+
     loginMessage.textContent = "";
     loginMessage.className = "message";
 
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-    });
+    try {
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
 
-    if (error) {
-        loginMessage.textContent = "E-mail ou senha inválidos.";
+        if (error) {
+            loginMessage.textContent = "E-mail ou senha inválidos.";
+            loginMessage.className = "message error";
+
+            loginButton.disabled = false;
+            loginButton.textContent = "Entrar no sistema";
+            return;
+        }
+
+        window.location.replace("./app.html");
+
+    } catch (error) {
+        console.error("Erro durante o login:", error);
+
+        loginMessage.textContent =
+            "Não foi possível realizar o login. Tente novamente.";
+
         loginMessage.className = "message error";
 
         loginButton.disabled = false;
         loginButton.textContent = "Entrar no sistema";
-        return;
     }
-
-    window.location.replace("./app.html");
 });
+
+// Inicializar
+await checkSession();
