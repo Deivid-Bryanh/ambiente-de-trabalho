@@ -1,334 +1,447 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clientes | Ambiente de Trabalho</title>
-  <link rel="stylesheet" href="./assets/css/style.css">
-  <style>
-    .page-content {
-      max-width: 1200px;
-      margin: 35px auto;
-      padding: 0 20px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
 
-    .page-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin-bottom: 25px;
-    }
+    <style>
+        .page-content {
+            padding: 30px;
+        }
 
-    .client-card {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
+        .page-heading {
+            margin-bottom: 25px;
+        }
 
-    .client-form {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
+        .client-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05);
+        }
 
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
+        .client-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
 
-    .field.full {
-      grid-column: 1 / -1;
-    }
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
 
-    .field label {
-      font-weight: 600;
-      font-size: 14px;
-    }
+        .field.full {
+            grid-column: 1 / -1;
+        }
 
-    .field input,
-    .field select,
-    .field textarea,
-    .filters input,
-    .filters select {
-      width: 100%;
-      padding: 11px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 7px;
-      font: inherit;
-      background: white;
-      box-sizing: border-box;
-    }
+        .field label {
+            font-weight: 600;
+            font-size: 14px;
+        }
 
-    .field textarea {
-      min-height: 85px;
-      resize: vertical;
-    }
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font: inherit;
+            box-sizing: border-box;
+        }
 
-    .form-actions {
-      grid-column: 1 / -1;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+        .field textarea {
+            min-height: 85px;
+            resize: vertical;
+        }
 
-    .action-button {
-      border: 0;
-      padding: 11px 17px;
-      border-radius: 7px;
-      cursor: pointer;
-      font-weight: 600;
-      background: #2563eb;
-      color: white;
-    }
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-    .secondary-button {
-      background: #e5e7eb;
-      color: #111827;
-    }
+        .form-actions button {
+            padding: 11px 18px;
+            border: 0;
+            border-radius: 7px;
+            cursor: pointer;
+        }
 
-    .danger-button {
-      background: #dc2626;
-      color: white;
-    }
+        #saveButton {
+            background: #2563eb;
+            color: white;
+        }
 
-    .filters {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
+        #cancelButton {
+            background: #e5e7eb;
+            color: #333;
+        }
 
-    .table-container {
-      overflow-x: auto;
-    }
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
 
-    .clients-table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 700px;
-    }
+        .filters input,
+        .filters select {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+        }
 
-    .clients-table th,
-    .clients-table td {
-      text-align: left;
-      padding: 13px;
-      border-bottom: 1px solid #e5e7eb;
-      font-size: 14px;
-    }
+        .clients-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    .clients-table th {
-      background: #f9fafb;
-    }
+        .clients-table th,
+        .clients-table td {
+            padding: 13px 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            vertical-align: middle;
+        }
 
-    .status {
-      display: inline-block;
-      padding: 5px 9px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      background: #f3f4f6;
-    }
+        .clients-table th {
+            font-size: 13px;
+            color: #666;
+        }
 
-    .status.agendamento {
-      background: #fef3c7;
-      color: #92400e;
-    }
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: #eee;
+        }
 
-    .status.concluido {
-      background: #dcfce7;
-      color: #166534;
-    }
+        .status.em_aberto {
+            background: #fef3c7;
+            color: #92400e;
+        }
 
-    .status.em_aberto {
-      background: #dbeafe;
-      color: #1e40af;
-    }
+        .status.agendamento {
+            background: #dbeafe;
+            color: #1e40af;
+        }
 
-    .row-actions {
-      display: flex;
-      gap: 7px;
-    }
+        .status.concluido {
+            background: #dcfce7;
+            color: #166534;
+        }
 
-    .row-actions button {
-      padding: 7px 10px;
-      border: 0;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+        .row-actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
 
-    .message-area {
-      margin: 15px 0;
-      font-size: 14px;
-    }
+        .row-actions button,
+        .installment-action {
+            border: 0;
+            border-radius: 6px;
+            padding: 7px 10px;
+            cursor: pointer;
+        }
 
-    .message-area.error {
-      color: #dc2626;
-    }
+        .edit-button {
+            background: #dbeafe;
+            color: #1e40af;
+        }
 
-    .message-area.success {
-      color: #15803d;
-    }
+        .delete-button {
+            background: #fee2e2;
+            color: #991b1b;
+        }
 
-    .back-link {
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 600;
-    }
+        .installments-section {
+            grid-column: 1 / -1;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 18px;
+        }
 
-    @media (max-width: 650px) {
-      .client-form,
-      .filters {
-        grid-template-columns: 1fr;
-      }
+        .installment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
 
-      .field.full,
-      .form-actions {
-        grid-column: auto;
-      }
-    }
-  </style>
+        .installment-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            align-items: end;
+            padding: 12px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .installment-item label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .installment-item input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 9px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .installment-record {
+            margin-top: 10px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .installment-record table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .installment-record th,
+        .installment-record td {
+            padding: 9px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        .paid {
+            color: #15803d;
+            font-weight: 600;
+        }
+
+        .pending {
+            color: #b45309;
+            font-weight: 600;
+        }
+
+        .installment-action {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .client-details-row td {
+            padding: 0 12px 18px;
+        }
+
+        .muted {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .message {
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 850px) {
+            .page-content {
+                padding: 15px;
+            }
+
+            .client-form {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full,
+            .form-actions,
+            .installments-section {
+                grid-column: 1;
+            }
+
+            .installment-item {
+                grid-template-columns: 1fr;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            .clients-table {
+                min-width: 850px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <header class="header">
-    <div class="container">
-      <h2>Ambiente de Trabalho</h2>
-      <a class="back-link" href="./app.html">Voltar ao painel</a>
+    <div class="page-content">
+
+        <div class="page-heading">
+            <h1>Clientes</h1>
+            <p>Gerencie seus clientes, processos e honorários.</p>
+        </div>
+
+        <section class="client-card">
+            <h2 id="formTitle">Cadastrar cliente</h2>
+
+            <form id="clientForm" class="client-form">
+                <input type="hidden" id="clientId">
+
+                <div class="field">
+                    <label for="nome">Nome completo *</label>
+                    <input type="text" id="nome" required>
+                </div>
+
+                <div class="field">
+                    <label for="cpf">CPF *</label>
+                    <input type="text" id="cpf" maxlength="14"
+                           placeholder="000.000.000-00" required>
+                </div>
+
+                <div class="field">
+                    <label for="numeroProcesso">Número do processo</label>
+                    <input type="text" id="numeroProcesso"
+                           placeholder="Ex.: 0000000-00.0000.0.00.0000">
+                </div>
+
+                <div class="field">
+                    <label for="comarca">Comarca</label>
+                    <input type="text" id="comarca"
+                           placeholder="Informe a comarca">
+                </div>
+
+                <div class="field">
+                    <label for="caso">Tipo de caso *</label>
+                    <input type="text" id="caso" required>
+                </div>
+
+                <div class="field">
+                    <label for="status">Status</label>
+                    <select id="status">
+                        <option value="em_aberto">Em aberto</option>
+                        <option value="agendamento">Agendamento</option>
+                        <option value="concluido">Concluído</option>
+                    </select>
+                </div>
+
+                <div class="field full">
+                    <label for="descricao">Descrição do caso</label>
+                    <textarea id="descricao"></textarea>
+                </div>
+
+                <div class="field full">
+                    <label for="observacoes">Observações</label>
+                    <textarea id="observacoes"></textarea>
+                </div>
+
+                <div class="field">
+                    <label for="honorarios">Honorários (R$)</label>
+                    <input type="number" id="honorarios"
+                           min="0" step="0.01" placeholder="0,00">
+                </div>
+
+                <div class="field">
+                    <label for="formaPagamento">Forma de pagamento</label>
+                    <select id="formaPagamento">
+                        <option value="">Selecione</option>
+                        <option value="a_vista">À vista</option>
+                        <option value="parcelado">Parcelado</option>
+                    </select>
+                </div>
+
+                <div id="installmentsSection"
+                     class="installments-section"
+                     style="display:none;">
+
+                    <h3>Parcelamento dos honorários</h3>
+                    <p class="muted">
+                        O sistema dividirá o valor automaticamente.
+                        Você poderá ajustar o valor de cada parcela.
+                    </p>
+
+                    <div class="field">
+                        <label for="quantidadeParcelas">
+                            Quantidade de parcelas
+                        </label>
+                        <input type="number" id="quantidadeParcelas"
+                               min="1" max="120" value="2">
+                    </div>
+
+                    <div class="field" style="margin-top:12px;">
+                        <label for="primeiroVencimento">
+                            Mês da primeira parcela
+                        </label>
+                        <input type="month" id="primeiroVencimento">
+                    </div>
+
+                    <div id="installmentList" class="installment-list"></div>
+
+                    <p id="installmentTotal" class="muted"></p>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="saveButton">
+                        Salvar cliente
+                    </button>
+
+                    <button type="button" id="cancelButton"
+                            style="display:none;">
+                        Cancelar edição
+                    </button>
+                </div>
+
+                <div id="formMessage"
+                     class="message field full"></div>
+            </form>
+        </section>
+
+        <section class="client-card">
+            <h2>Clientes cadastrados</h2>
+
+            <div class="filters">
+                <input type="text" id="searchInput"
+                       placeholder="Pesquisar por nome, CPF ou processo">
+
+                <select id="filterStatus">
+                    <option value="">Todos os status</option>
+                    <option value="em_aberto">Em aberto</option>
+                    <option value="agendamento">Agendamento</option>
+                    <option value="concluido">Concluído</option>
+                </select>
+            </div>
+
+            <div id="listMessage" class="message"></div>
+
+            <div class="table-wrapper">
+                <table class="clients-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>Número do processo</th>
+                            <th>Comarca</th>
+                            <th>Status</th>
+                            <th>Observações</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="clientsList"></tbody>
+                </table>
+            </div>
+        </section>
+
     </div>
-  </header>
 
-  <main class="page-content">
-    <div class="page-heading">
-      <div>
-        <h1>Clientes</h1>
-        <p>Cadastre, consulte e gerencie seus clientes.</p>
-      </div>
-    </div>
-
-    <section class="client-card">
-      <h2 id="formTitle">Cadastrar cliente</h2>
-
-      <form id="clientForm" class="client-form">
-        <input type="hidden" id="clientId">
-
-        <div class="field">
-          <label for="nome">Nome completo *</label>
-          <input id="nome" type="text" required>
-        </div>
-
-        <div class="field">
-          <label for="cpf">CPF *</label>
-          <input id="cpf" type="text" maxlength="14"
-                 placeholder="000.000.000-00" required>
-        </div>
-
-        <div class="field">
-          <label for="caso">Caso *</label>
-          <input id="caso" type="text" required>
-        </div>
-
-        <div class="field">
-          <label for="status">Status *</label>
-          <select id="status" required>
-            <option value="em_aberto">Em aberto</option>
-            <option value="agendamento">Agendamento</option>
-            <option value="concluido">Concluído</option>
-          </select>
-        </div>
-
-        <div class="field full">
-          <label for="descricao">Descrição do caso</label>
-          <textarea id="descricao"></textarea>
-        </div>
-
-        <div class="field full">
-          <label for="observacoes">Observações</label>
-          <textarea id="observacoes"></textarea>
-        </div>
-
-        <div class="field">
-          <label for="dataInicial">Data inicial</label>
-          <input id="dataInicial" type="date">
-        </div>
-
-        <div class="field">
-          <label for="dataFinal">Data final / prazo</label>
-          <input id="dataFinal" type="date">
-        </div>
-
-        <div class="field">
-          <label for="honorarios">Honorários (R$)</label>
-          <input id="honorarios" type="number"
-                 min="0" step="0.01" value="0">
-        </div>
-
-        <div class="field">
-          <label for="formaPagamento">Forma de pagamento</label>
-          <select id="formaPagamento">
-            <option value="">Não informado</option>
-            <option value="parcelado">Parcelado</option>
-            <option value="a_vista">À vista</option>
-          </select>
-        </div>
-
-        <div class="form-actions">
-          <button class="action-button" id="saveButton" type="submit">
-            Cadastrar cliente
-          </button>
-          <button class="action-button secondary-button"
-                  id="cancelButton" type="button" hidden>
-            Cancelar edição
-          </button>
-        </div>
-      </form>
-
-      <div id="formMessage" class="message-area"></div>
-    </section>
-
-    <section class="client-card">
-      <h2>Clientes cadastrados</h2>
-
-      <div class="filters">
-        <input id="searchInput" type="search"
-               placeholder="Pesquisar por nome ou CPF...">
-
-        <select id="filterStatus">
-          <option value="">Todos os status</option>
-          <option value="em_aberto">Em aberto</option>
-          <option value="agendamento">Agendamento</option>
-          <option value="concluido">Concluído</option>
-        </select>
-      </div>
-
-      <div id="listMessage" class="message-area"></div>
-
-      <div class="table-container">
-        <table class="clients-table">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>CPF</th>
-              <th>Status</th>
-              <th>Observações</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="clientsList">
-            <tr>
-              <td colspan="5">Carregando clientes...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
-
-  <script type="module" src="./assets/js/clientes.js"></script>
+    <script type="module" src="./assets/js/clientes.js"></script>
 </body>
 </html>
