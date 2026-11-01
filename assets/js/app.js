@@ -1,27 +1,46 @@
-
 import { supabase } from "./supabase.js";
 
 // Verificar autenticação
-const {
-    data: { session }
-} = await supabase.auth.getSession();
+async function checkAuthentication() {
+    const {
+        data: { session },
+        error
+    } = await supabase.auth.getSession();
 
-if (!session) {
-    window.location.replace("./index.html");
+    if (error || !session) {
+        window.location.replace("./index.html");
+        return false;
+    }
+
+    // Mostrar usuário conectado
+    const userEmail = document.getElementById("userEmail");
+
+    if (userEmail) {
+        userEmail.textContent = session.user.email || "Usuário conectado";
+    }
+
+    return true;
 }
 
-// Mostrar usuário conectado
-document.getElementById("userEmail").textContent =
-    session.user.email;
-
 // Encerrar sessão
-document.getElementById("logoutButton").addEventListener(
-    "click",
-    async () => {
+const logoutButton = document.getElementById("logoutButton");
+
+if (logoutButton) {
+    logoutButton.addEventListener("click", async () => {
+        logoutButton.disabled = true;
+
         const { error } = await supabase.auth.signOut();
 
-        if (!error) {
-            window.location.replace("./index.html");
+        if (error) {
+            console.error("Erro ao encerrar sessão:", error);
+            logoutButton.disabled = false;
+            alert("Não foi possível encerrar a sessão. Tente novamente.");
+            return;
         }
-    }
-);
+
+        window.location.replace("./index.html");
+    });
+}
+
+// Inicializar autenticação
+await checkAuthentication();
