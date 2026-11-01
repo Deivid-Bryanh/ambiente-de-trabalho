@@ -1,3 +1,4 @@
+
 import { supabase } from "./supabase.js";
 
 const clientForm = document.getElementById("clientForm");
@@ -87,7 +88,7 @@ async function checkSession() {
     const { data, error } = await supabase.auth.getSession();
 
     if (error || !data.session) {
-        window.location.href = "index.html";
+        window.location.replace("./index.html");
         return false;
     }
 
@@ -204,7 +205,8 @@ async function renderClients() {
         </tr>
     `).join("");
 
-    listMessage.textContent = `${filtered.length} cliente(s) encontrado(s).`;
+    listMessage.textContent =
+        `${filtered.length} cliente(s) encontrado(s).`;
 }
 
 function getDefaultMonth() {
@@ -254,7 +256,6 @@ function calculateInstallments(total, quantity) {
     });
 }
 
-
 function renderInstallmentInputs() {
     const total = Number(
         document.getElementById("honorarios").value || 0
@@ -281,7 +282,6 @@ function renderInstallmentInputs() {
         return;
     }
 
-    // Calcula automaticamente a divisão dos honorários
     const automaticValues = calculateInstallments(total, quantity);
 
     installmentList.innerHTML = Array.from(
@@ -325,7 +325,6 @@ function renderInstallmentInputs() {
     updateInstallmentTotal();
 }
 
-
 function updateInstallmentTotal() {
     const values = Array.from(
         installmentList.querySelectorAll(".installment-value")
@@ -368,6 +367,7 @@ function collectInstallments() {
     });
 }
 
+// Salvar parcelas sem apagar ou modificar parcelas já pagas
 async function saveInstallments(clientId, newInstallments) {
     const existing = await getInstallments(clientId);
 
@@ -375,12 +375,51 @@ async function saveInstallments(clientId, newInstallments) {
         existing.map(item => [item.numero_parcela, item])
     );
 
+    const newByNumber = new Map(
+        newInstallments.map(item => [item.numero_parcela, item])
+    );
+
+    // Primeiro verifica se alguma parcela paga seria alterada ou removida.
+    // Essa validação acontece antes de qualquer modificação no banco.
+    for (const old of existing) {
+        if (!old.pago) continue;
+
+        const replacement = newByNumber.get(old.numero_parcela);
+
+        if (!replacement) {
+            throw new Error(
+                `A parcela ${old.numero_parcela} já foi paga. ` +
+                "Não é possível reduzir a quantidade de parcelas e removê-la."
+            );
+        }
+
+        const oldValueCents = Math.round(Number(old.valor) * 100);
+        const newValueCents = Math.round(Number(replacement.valor) * 100);
+
+        const oldMonth = String(old.mes_referencia).substring(0, 10);
+        const newMonth = String(replacement.mes_referencia).substring(0, 10);
+
+        if (
+            oldValueCents !== newValueCents ||
+            oldMonth !== newMonth
+        ) {
+            throw new Error(
+                `A parcela ${old.numero_parcela} já foi paga. ` +
+                "Não é possível alterar seu valor ou mês de referência."
+            );
+        }
+    }
+
+    // Atualiza parcelas existentes e insere novas.
     for (const installment of newInstallments) {
         const old = existingByNumber.get(
             installment.numero_parcela
         );
 
         if (old) {
+            // Parcelas pagas permanecem intactas.
+            if (old.pago) continue;
+
             const { error } = await supabase
                 .from("parcelas")
                 .update({
@@ -406,14 +445,20 @@ async function saveInstallments(clientId, newInstallments) {
         }
     }
 
-    const removedIds = Array.from(existingByNumber.values())
+    // Exclui somente parcelas excedentes que ainda não foram pagas.
+    const removedInstallments = Array.from(
+        existingByNumber.values()
+    );
+
+    const unpaidIds = removedInstallments
+        .filter(item => !item.pago)
         .map(item => item.id);
 
-    if (removedIds.length) {
+    if (unpaidIds.length) {
         const { error } = await supabase
             .from("parcelas")
             .delete()
-            .in("id", removedIds);
+            .in("id", unpaidIds);
 
         if (error) throw error;
     }
@@ -517,7 +562,9 @@ async function editClient(id) {
 
 async function deleteClient(id) {
     const confirmed = confirm(
-        "Tem certeza que deseja excluir este cliente? As parcelas também serão excluídas."
+        "Tem certeza que deseja excluir este cliente? " +
+        "As parcelas vinculadas também poderão ser excluídas, " +
+        "conforme a configuração do banco de dados."
     );
 
     if (!confirmed) return;
@@ -627,9 +674,17 @@ async function togglePayment(id, currentlyPaid, clientId) {
         return;
     }
 
+    // Fecha a área antes de reabri-la para carregar os dados atualizados.
+    const detailsRow = document.getElementById(`details-${clientId}`);
+
+    if (detailsRow) {
+        detailsRow.style.display = "none";
+    }
+
     await showClientInstallments(clientId);
 }
 
+// Salvar cliente
 clientForm.addEventListener("submit", async event => {
     event.preventDefault();
 
@@ -639,7 +694,11 @@ clientForm.addEventListener("submit", async event => {
     const cpf = document.getElementById("cpf").value.replace(/\D/g, "");
 
     if (cpf.length !== 11) {
-        showMessage(formMessage, "Informe um CPF válido com 11 números.", true);
+        showMessage(
+            formMessage,
+            "Informe um CPF válido com 11 números.",
+            true
+        );
         return;
     }
 
@@ -648,7 +707,11 @@ clientForm.addEventListener("submit", async event => {
     );
 
     if (honorarios < 0 || !Number.isFinite(honorarios)) {
-        showMessage(formMessage, "Informe um valor válido de honorários.", true);
+        showMessage(
+            formMessage,
+            "Informe um valor válido de honorários.",
+            true
+        );
         return;
     }
 
@@ -703,6 +766,7 @@ clientForm.addEventListener("submit", async event => {
         }
     }
 
+    // Confirmar usuário autenticado.
     const { data: authData, error: authError } =
         await supabase.auth.getUser();
 
@@ -761,13 +825,37 @@ clientForm.addEventListener("submit", async event => {
 
         if (formaPagamento === "parcelado") {
             await saveInstallments(clientId, installments);
-        } else if (id) {
-            const { error } = await supabase
-                .from("parcelas")
-                .delete()
-                .eq("cliente_id", clientId);
 
-            if (error) throw error;
+        } else if (id) {
+            // Antes de deixar de utilizar parcelamento,
+            // verifica se existem parcelas já pagas.
+            const existing = await getInstallments(clientId);
+
+            const paidInstallments = existing.filter(
+                item => item.pago
+            );
+
+            if (paidInstallments.length) {
+                throw new Error(
+                    "Este cliente possui parcelas pagas. " +
+                    "Não é possível mudar a forma de pagamento " +
+                    "enquanto existirem parcelas pagas."
+                );
+            }
+
+            // Exclui somente parcelas que ainda estão pendentes.
+            const unpaidIds = existing
+                .filter(item => !item.pago)
+                .map(item => item.id);
+
+            if (unpaidIds.length) {
+                const { error } = await supabase
+                    .from("parcelas")
+                    .delete()
+                    .in("id", unpaidIds);
+
+                if (error) throw error;
+            }
         }
 
         showMessage(
@@ -787,10 +875,12 @@ clientForm.addEventListener("submit", async event => {
         );
     } finally {
         saveButton.disabled = false;
-        saveButton.textContent = id ? "Atualizar cliente" : "Salvar cliente";
+        saveButton.textContent = id ?
+            "Atualizar cliente" : "Salvar cliente";
     }
 });
 
+// Ações da tabela de clientes
 clientsList.addEventListener("click", async event => {
     const button = event.target.closest("button[data-action]");
 
@@ -821,6 +911,7 @@ clientsList.addEventListener("click", async event => {
     }
 });
 
+// Forma de pagamento
 document.getElementById("formaPagamento")
     .addEventListener("change", event => {
         const isInstallment = event.target.value === "parcelado";
@@ -838,34 +929,44 @@ document.getElementById("formaPagamento")
         }
     });
 
+// Quantidade de parcelas
 document.getElementById("quantidadeParcelas")
     .addEventListener("input", renderInstallmentInputs);
 
+// Valor dos honorários
 document.getElementById("honorarios")
     .addEventListener("input", () => {
-        if (document.getElementById("formaPagamento").value === "parcelado") {
+        if (
+            document.getElementById("formaPagamento").value === "parcelado"
+        ) {
             renderInstallmentInputs();
         }
     });
 
+// Primeiro vencimento
 document.getElementById("primeiroVencimento")
     .addEventListener("change", renderInstallmentInputs);
 
+// Atualização dos valores das parcelas
 installmentList.addEventListener("input", event => {
     if (event.target.classList.contains("installment-value")) {
         updateInstallmentTotal();
     }
 });
 
+// Botão cancelar
 cancelButton.addEventListener("click", resetForm);
 
+// Pesquisa e filtros
 searchInput.addEventListener("input", renderClients);
 filterStatus.addEventListener("change", renderClients);
 
+// Formatação do CPF
 document.getElementById("cpf").addEventListener("input", event => {
     event.target.value = formatCPF(event.target.value);
 });
 
+// Inicialização
 document.getElementById("primeiroVencimento").value =
     getDefaultMonth();
 
