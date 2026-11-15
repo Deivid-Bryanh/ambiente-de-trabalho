@@ -57,18 +57,64 @@ function formatFileSize(bytes) {
     return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-function downloadFile(bytes, filename, mimeType) {
-    const blob = new Blob([bytes], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1500);
+// Resultado fica disponível para conferência antes do download.
+let resultUrl = null;
+function showResult(data, filename, mimeType, options = {}) {
+    if (resultUrl) URL.revokeObjectURL(resultUrl);
+    const blob = data instanceof Blob ? data : new Blob([data], { type: mimeType });
+    resultUrl = URL.createObjectURL(blob);
+    const panel = document.getElementById("finalResult");
+    const preview = document.getElementById("finalPreview");
+    const summary = document.getElementById("finalSummary");
+    const download = document.getElementById("finalDownload");
+    const open = document.getElementById("finalOpen");
+    const warning = document.getElementById("finalWarning");
+    panel.hidden = false;
+    preview.replaceChildren();
+    summary.textContent = `${filename} · ${formatFileSize(blob.size)}`;
+    warning.textContent = options.warning || "";
+    warning.hidden = !options.warning;
+    download.onclick = () => {
+        const link = document.createElement("a");
+        link.href = resultUrl;
+        link.download = filename;
+        document.body.append(link);
+        link.click();
+        link.remove();
+        document.getElementById("finalDownloaded").hidden = false;
+    };
+    open.hidden = mimeType !== "application/pdf";
+    open.onclick = () => window.open(resultUrl, "_blank", "noopener,noreferrer");
+    if (mimeType === "application/pdf") {
+        const frame = document.createElement("iframe");
+        frame.src = resultUrl + "#toolbar=0";
+        frame.title = "Pré-visualização do PDF pronto";
+        frame.className = "final-pdf-frame";
+        preview.append(frame);
+    } else if (options.files) {
+        const title = document.createElement("p");
+        title.textContent = `Serão baixados ${options.files.length} documentos em um arquivo ZIP. Confira os nomes:`;
+        preview.append(title);
+        const list = document.createElement("div");
+        list.className = "final-zip-list";
+        for (const file of options.files) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = `📄 ${file.name} · Ver documento`;
+            button.onclick = () => {
+                const pdfBlob = new Blob([file.bytes], { type: "application/pdf" });
+                const url = URL.createObjectURL(pdfBlob);
+                const win = window.open(url, "_blank", "noopener,noreferrer");
+                if (!win) alert("Seu navegador bloqueou a visualização. Permita abrir uma nova aba.");
+                setTimeout(() => URL.revokeObjectURL(url), 120000);
+            };
+            list.append(button);
+        }
+        preview.append(list);
+    }
+    document.getElementById("finalDownloaded").hidden = true;
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    download.focus({ preventScroll: true });
 }
 
 function safeFilename(name) {
@@ -286,32 +332,10 @@ async function createPdfFromPages(sourcePdf, pageIndexes) {
 }
 
 // Gera ZIP contendo vários PDFs.
-async function generateZip(pdfFiles, zipName) {
+async function generateZip(pdfFiles) {
     const zip = new JSZip();
-
-    for (const item of pdfFiles) {
-        zip.file(item.name, item.bytes);
-    }
-
-    const zipBlob = await zip.generateAsync({
-        type: "blob",
-        compression: "DEFLATE",
-        compressionOptions: {
-            level: 5
-        }
-    });
-
-    const url = URL.createObjectURL(zipBlob);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = zipName;
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    for (const item of pdfFiles) zip.file(item.name, item.bytes);
+    return await zip.generateAsync({type: "blob", compression: "DEFLATE", compressionOptions: {level: 5}});
 }
 
 // Imagem para PDF
@@ -381,11 +405,11 @@ imageButton.addEventListener("click", async () => {
 
         const result = await pdf.save();
 
-        downloadFile(result, "imagens-convertidas.pdf", "application/pdf");
+        showResult(result, "imagens-convertidas.pdf", "application/pdf");
 
         showMessage(
             "imageMessage",
-            "PDF criado e baixado com sucesso!",
+            "PDF criado! Confira o resultado abaixo e clique em Baixar.",
             "success"
         );
 
@@ -430,11 +454,11 @@ mergeButton.addEventListener("click", async () => {
 
         const result = await mergedPdf.save();
 
-        downloadFile(result, "documentos-mesclados.pdf", "application/pdf");
+        showResult(result, "documentos-mesclados.pdf", "application/pdf");
 
         showMessage(
             "mergeMessage",
-            "Documentos mesclados com sucesso!",
+            "Documentos unidos! Confira o resultado antes de baixar.",
             "success"
         );
 
@@ -541,14 +565,12 @@ splitButton.addEventListener("click", async () => {
             "Dividir PDF"
         );
 
-        await generateZip(
-            outputFiles,
-            `${baseName}-dividido.zip`
-        );
+        const zipBlob = await generateZip(outputFiles);
+        showResult(zipBlob, `${baseName}-dividido.zip`, "application/zip", {files: outputFiles});
 
         showMessage(
             "splitMessage",
-            `Concluído! ${outputFiles.length} arquivo(s) PDF foram criados e reunidos em um ZIP.`,
+            `Pronto! Confira os ${outputFiles.length} arquivos e baixe o ZIP quando quiser.`,
             "success"
         );
 
@@ -725,14 +747,17 @@ if (typeof window.html2pdf !== "function") {
     throw new Error("A biblioteca html2pdf não foi carregada.");
 }
 
-await window.html2pdf()
+const pdfBlob = await window.html2pdf()
     .set(options)
     .from(temporaryContainer)
-    .save();
+    .toPdf()
+    .outputPdf("blob");
+
+showResult(pdfBlob, options.filename, "application/pdf");
 
         showMessage(
             "wordMessage",
-            "Documento convertido para PDF com sucesso!",
+            "PDF pronto! Confira a formatação antes de baixar.",
             "success"
         );
 
@@ -922,11 +947,11 @@ compressButton.addEventListener("click", async () => {
         const filename =
             `${safeFilename(file.name)}-comprimido.pdf`;
 
-        downloadFile(
-            compressedBytes,
-            filename,
-            "application/pdf"
-        );
+        showResult(compressedBytes, filename, "application/pdf", {
+            warning: difference <= 0
+                ? "Este resultado não ficou menor que o original. Você pode voltar e escolher outra qualidade, ou manter o arquivo original."
+                : "Para reduzir o tamanho, as páginas foram transformadas em imagens. Textos podem deixar de ser selecionáveis ou pesquisáveis. Confira a qualidade antes de baixar."
+        });
 
         if (difference > 0) {
             showMessage(
