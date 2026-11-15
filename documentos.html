@@ -1,636 +1,102 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentos | Ambiente de Trabalho</title>
-    <link rel="stylesheet" href="./assets/css/style.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentos | Ambiente de Trabalho</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<style>
+:root{--blue:#2459d3;--ink:#17243a;--muted:#52627a;--line:#dce5f1;--bg:#f5f8fc}*{box-sizing:border-box}body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}.documents-container{max-width:1050px;margin:auto;padding:30px 20px 65px}.documents-header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:25px}.documents-header h1{font-size:clamp(26px,4vw,36px);margin:0 0 6px}.documents-header p,.hint{color:var(--muted);line-height:1.55;margin:0}.back-link{color:var(--blue);font-weight:700;text-decoration:none}.intro{padding:25px 28px;background:#eaf1ff;border-radius:20px;margin-bottom:27px}.intro h2{margin:0 0 7px;font-size:23px}.step-label{font-size:14px;font-weight:800;color:#365b98;letter-spacing:.03em;text-transform:uppercase;margin:0 0 10px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.choice{display:flex;align-items:center;gap:17px;text-align:left;border:2px solid var(--line);background:white;border-radius:18px;padding:22px;cursor:pointer;min-height:116px;color:inherit;font:inherit;transition:.15s}.choice:hover,.choice:focus-visible{border-color:var(--blue);box-shadow:0 5px 18px #234ca51a;outline:none}.choice-icon{font-size:32px;background:#eef4ff;border-radius:14px;padding:12px;flex-shrink:0}.choice strong{display:block;font-size:19px;margin-bottom:4px}.choice small{display:block;color:var(--muted);font-size:14px;line-height:1.4}.workspace{margin-top:24px;background:white;border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:0 7px 26px #142c4c0b}.workspace[hidden],.tool-card[hidden],.split-section[hidden],.choices-wrap[hidden]{display:none!important}.workspace-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.workspace h2{font-size:26px;margin:0 0 8px}.change-tool{border:1px solid #c6d7ef;background:white;border-radius:12px;color:var(--blue);font-size:15px;font-weight:700;padding:12px 16px;cursor:pointer}.tool-card{margin-top:20px}.tool-card h3{font-size:20px;margin:0 0 8px}.tool-card>p{color:var(--muted);line-height:1.5}.drop-area{border:2px dashed #9cb6dc;background:#f8fbff;border-radius:17px;padding:25px;text-align:center;position:relative}.drop-area strong{display:block;font-size:19px;margin-bottom:6px}.drop-area span{display:block;color:var(--muted);margin-bottom:15px}.drop-area input[type=file]{max-width:100%;font-size:16px}.file-info{display:block;color:#34445f;font-weight:600;margin:14px 0;overflow-wrap:anywhere}.tool-button{border:0;border-radius:13px;background:var(--blue);color:white;padding:17px 25px;font-size:18px;font-weight:750;cursor:pointer;min-height:56px;width:100%}.tool-button:hover{background:#1848b5}.tool-button:disabled{opacity:.55;cursor:not-allowed}.tool-message{font-size:16px;line-height:1.5;margin-top:14px;overflow-wrap:anywhere}.tool-message.error{color:#a91c28}.tool-message.success{color:#16733d}.split-section{margin-top:20px}.split-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0}.split-option{background:white;border:2px solid var(--line);border-radius:13px;padding:18px;text-align:left;cursor:pointer;color:inherit;font:inherit}.split-option.active{border-color:var(--blue);background:#eff5ff}.split-option strong,.split-option span{display:block}.split-option span{font-size:14px;color:var(--muted);margin-top:6px}.split-panel{border-radius:14px;background:#f6f9ff;padding:20px}.split-panel label{display:block;font-weight:700;margin:15px 0 8px}.split-panel input{width:100%;padding:14px;font:inherit;border:1px solid #9caec7;border-radius:10px}.split-help{font-size:14px;color:var(--muted);line-height:1.5}.split-summary{padding:13px;background:#e8f1ff;border-radius:10px;color:#244e94;margin:15px 0}.privacy-note{display:flex;gap:12px;margin-top:26px;padding:18px;border-radius:14px;background:#eaf7ef;color:#175d37;line-height:1.5}.privacy-note strong{display:block}.guide{display:flex;gap:10px;align-items:center;margin:15px 0 4px;color:#53647d;font-size:15px}.guide span{background:#eaf1ff;color:#2459d3;border-radius:50%;font-weight:800;display:inline-grid;place-items:center;width:30px;height:30px;flex-shrink:0}select{width:100%;font:inherit;padding:14px;border-radius:10px;border:1px solid #a6b7d0;margin:8px 0 10px}label{font-weight:700}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #85aaf5;outline-offset:3px}@media(max-width:680px){.documents-header,.workspace-top{flex-direction:column;align-items:flex-start}.choices,.split-options{grid-template-columns:1fr}.workspace{padding:20px}.choice{min-height:100px}.documents-container{padding:20px 14px 45px}}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            background: #f5f7fb;
-        }
-
-        .documents-container {
-            max-width: 1180px;
-            margin: 0 auto;
-            padding: 35px 24px 60px;
-        }
-
-        .documents-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .documents-header h1 {
-            margin: 0 0 7px;
-            font-size: 29px;
-        }
-
-        .documents-header p {
-            color: #64748b;
-            margin: 0;
-        }
-
-        .back-link {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .documents-banner {
-            padding: 25px;
-            border-radius: 16px;
-            background: linear-gradient(120deg, #172554, #2563eb);
-            color: white;
-            margin-bottom: 30px;
-        }
-
-        .documents-banner h2 {
-            margin: 0 0 8px;
-            font-size: 22px;
-        }
-
-        .documents-banner p {
-            margin: 0;
-            color: #dbeafe;
-            line-height: 1.6;
-        }
-
-        .section-heading {
-            margin: 32px 0 17px;
-        }
-
-        .section-heading h2 {
-            margin: 0 0 5px;
-            font-size: 20px;
-        }
-
-        .section-heading p {
-            color: #64748b;
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 18px;
-        }
-
-        .tool-card {
-            background: white;
-            border: 1px solid #e5eaf1;
-            border-radius: 14px;
-            padding: 22px;
-            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.035);
-            min-width: 0;
-        }
-
-        .tool-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 46px;
-            height: 46px;
-            border-radius: 12px;
-            font-size: 23px;
-            margin-bottom: 17px;
-        }
-
-        .icon-blue {
-            background: #eff6ff;
-        }
-
-        .icon-purple {
-            background: #f5f3ff;
-        }
-
-        .icon-green {
-            background: #ecfdf5;
-        }
-
-        .tool-card h3 {
-            margin: 0 0 8px;
-            font-size: 18px;
-        }
-
-        .tool-card > p {
-            color: #64748b;
-            font-size: 14px;
-            line-height: 1.5;
-            min-height: 42px;
-            margin: 0 0 18px;
-        }
-
-        /* ÁREA DE SELEÇÃO DE ARQUIVOS */
-        .drop-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 22px 14px;
-            text-align: center;
-            border: 1.5px dashed #cbd5e1;
-            border-radius: 10px;
-            background: #f8fafc;
-            transition: 0.2s;
-        }
-
-        .drop-area:hover {
-            border-color: #2563eb;
-            background: #eff6ff;
-        }
-
-        .drop-area strong {
-            display: block;
-            color: #334155;
-            font-size: 14px;
-        }
-
-        .drop-area span {
-            color: #64748b;
-            font-size: 12px;
-        }
-
-        .drop-area input[type="file"] {
-            display: block;
-            position: static;
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-            opacity: 1;
-            cursor: pointer;
-            margin-top: 8px;
-            font-size: 12px;
-        }
-
-        .file-info {
-            display: block;
-            margin-top: 10px;
-            color: #475569;
-            font-size: 12px;
-            overflow-wrap: anywhere;
-        }
-
-        .tool-button {
-            width: 100%;
-            border: none;
-            border-radius: 8px;
-            background: #2563eb;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
-            padding: 12px 15px;
-            margin-top: 15px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .tool-button:hover {
-            background: #1d4ed8;
-        }
-
-        .tool-button:disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
-        }
-
-        .split-section {
-            background: white;
-            border: 1px solid #e5eaf1;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.035);
-        }
-
-        .split-intro {
-            margin-bottom: 20px;
-        }
-
-        .split-intro h2 {
-            margin: 0 0 7px;
-            font-size: 21px;
-        }
-
-        .split-intro p {
-            margin: 0;
-            color: #64748b;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .split-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .split-option {
-            text-align: left;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 17px;
-            background: white;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #334155;
-        }
-
-        .split-option:hover {
-            border-color: #93c5fd;
-        }
-
-        .split-option.active {
-            border-color: #2563eb;
-            background: #eff6ff;
-        }
-
-        .split-option strong {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 14px;
-        }
-
-        .split-option span {
-            color: #64748b;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .split-panel {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .split-panel label {
-            display: block;
-            font-weight: 600;
-            font-size: 13px;
-            margin: 15px 0 8px;
-        }
-
-        .split-panel input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font: inherit;
-        }
-
-        .split-help {
-            color: #64748b;
-            font-size: 12px;
-            line-height: 1.6;
-            margin-top: 8px;
-        }
-
-        .split-summary {
-            padding: 12px;
-            background: #eff6ff;
-            color: #1e40af;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-top: 15px;
-            line-height: 1.5;
-        }
-
-        .tool-message {
-            margin-top: 13px;
-            font-size: 13px;
-            line-height: 1.5;
-            overflow-wrap: anywhere;
-        }
-
-        .tool-message.error {
-            color: #dc2626;
-        }
-
-        .tool-message.success {
-            color: #15803d;
-        }
-
-        .privacy-note {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            padding: 17px;
-            margin-top: 25px;
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            border-radius: 11px;
-            color: #166534;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .privacy-note strong {
-            display: block;
-            margin-bottom: 3px;
-        }
-
-        @media (max-width: 850px) {
-            .tools-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        @media (max-width: 600px) {
-            .documents-container {
-                padding: 24px 14px 40px;
-            }
-
-            .documents-header {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .documents-header h1 {
-                font-size: 25px;
-            }
-
-            .tools-grid,
-            .split-options {
-                grid-template-columns: 1fr;
-            }
-
-            .split-section {
-                padding: 17px;
-            }
-        }
-    </style>
+.final-result{margin:26px 0;padding:25px;background:#fff;border:2px solid #2459d3;border-radius:20px;box-shadow:0 10px 30px #162d5b12}.final-result[hidden],.final-result [hidden]{display:none!important}.final-result h2{font-size:25px;margin:0 0 9px}.final-result p{line-height:1.55}.final-pdf-frame{width:100%;height:520px;border:1px solid #d5dfeb;border-radius:12px;background:#f3f6fa}.final-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}.final-actions button{padding:15px 22px;font:inherit;font-weight:700;border-radius:12px;cursor:pointer}.final-download{background:#205bd4;color:#fff;border:0;flex:1}.final-open,.final-back{background:#fff;border:1px solid #9daec8;color:#15315c}.final-zip-list{display:grid;gap:8px;max-height:350px;overflow:auto}.final-zip-list button{text-align:left;padding:13px;border:1px solid #cbd5e1;border-radius:10px;background:#f8fafc;cursor:pointer;overflow-wrap:anywhere}.final-warning{background:#fff7e6;padding:14px;border-radius:10px;color:#704400}.final-done{font-weight:700;color:#166534}@media(max-width:600px){.final-result{padding:16px}.final-pdf-frame{height:380px}.final-actions{flex-direction:column}.final-actions button{width:100%}}
+</style>
+<style>
+.preview-panel{margin:20px 0;padding:22px;border:1px solid #cbd9ed;background:#f8fbff;border-radius:18px}.preview-panel[hidden]{display:none!important}.preview-panel h3{margin:0 0 6px;font-size:21px}.preview-subtitle{color:#52627a;margin:0 0 16px}.preview-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:13px;max-height:450px;overflow:auto}.preview-item{background:white;border:1px solid #d9e4f1;border-radius:12px;padding:12px;min-width:0}.preview-item img,.preview-item canvas{display:block;width:100%;height:155px;object-fit:contain;background:#f0f3f8;border-radius:7px}.preview-item strong{display:block;margin-top:8px;overflow-wrap:anywhere;font-size:13px}.preview-item small{color:#52627a}.preview-document{background:white;padding:16px;border-radius:12px;max-height:360px;overflow:auto;line-height:1.55;overflow-wrap:anywhere}.preview-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}.preview-actions button{padding:13px 17px;border-radius:11px;font:inherit;font-weight:700;cursor:pointer}.preview-confirm{background:#2459d3;color:white;border:0;flex:1}.preview-cancel{background:white;border:1px solid #a6b7d0;color:#17243a}.preview-note{color:#52627a;font-size:14px;margin-top:12px}.tool-button{margin-top:12px}.preview-item .preview-fallback{min-height:155px;display:grid;place-items:center;font-size:48px;background:#eef4ff;border-radius:7px}.preview-loading{color:#365b98}.preview-panel button:focus-visible{outline:3px solid #85aaf5;outline-offset:3px}@media(max-width:600px){.preview-panel{padding:15px}.preview-actions{flex-direction:column}.preview-actions button{width:100%}}
+</style>
 </head>
-
-<body>
-
-<main class="documents-container">
-
-    <header class="documents-header">
-        <div>
-            <h1>Central de documentos</h1>
-            <p>Suas ferramentas para converter e organizar arquivos.</p>
-        </div>
-
-        <a class="back-link" href="./app.html">
-            ← Voltar ao painel
-        </a>
-    </header>
-
-    <section class="documents-banner">
-        <h2>Organize seus documentos com facilidade.</h2>
-        <p>
-            Converta imagens, una arquivos PDF e separe páginas
-            em poucos passos.
-        </p>
-    </section>
-
-    <div class="section-heading">
-        <h2>Ferramentas disponíveis</h2>
-        <p>Selecione a ferramenta que deseja utilizar.</p>
-    </div>
-
-    <section class="tools-grid">
-
-        <article class="tool-card">
-            <div class="tool-icon icon-blue">🖼️</div>
-            <h3>Imagem para PDF</h3>
-            <p>Transforme várias imagens em um único documento PDF.</p>
-
-            <div class="drop-area">
-                <strong>+ Selecionar imagens</strong>
-                <span>JPG, PNG, WebP e outros formatos de imagem</span>
-                <input type="file" id="imageFiles" accept="image/*" multiple>
-            </div>
-
-            <span class="file-info" id="imageFileInfo">
-                Nenhuma imagem selecionada.
-            </span>
-
-            <button class="tool-button" id="imageToPdfButton">
-                Converter para PDF
-            </button>
-
-            <div class="tool-message" id="imageMessage"></div>
-        </article>
-
-        <article class="tool-card">
-            <div class="tool-icon icon-purple">📑</div>
-            <h3>Mesclar PDFs</h3>
-            <p>Una dois ou mais documentos em um único arquivo PDF.</p>
-
-            <div class="drop-area">
-                <strong>+ Selecionar PDFs</strong>
-                <span>Selecione dois ou mais documentos</span>
-                <input type="file" id="mergeFiles" accept=".pdf,application/pdf" multiple>
-            </div>
-
-            <span class="file-info" id="mergeFileInfo">
-                Nenhum PDF selecionado.
-            </span>
-
-            <button class="tool-button" id="mergeButton">
-                Mesclar documentos
-            </button>
-
-            <div class="tool-message" id="mergeMessage"></div>
-        </article>
-
-        <article class="tool-card">
-            <div class="tool-icon icon-green">✂️</div>
-            <h3>Dividir PDF</h3>
-            <p>Separe todas as páginas ou organize o documento por intervalos.</p>
-
-            <div class="drop-area">
-                <strong>+ Selecionar PDF</strong>
-                <span>Escolha o documento que deseja dividir</span>
-                <input type="file" id="splitFile" accept=".pdf,application/pdf">
-            </div>
-
-            <span class="file-info" id="splitFileInfo">
-                Nenhum PDF selecionado.
-            </span>
-        </article>
-
-        <!-- WORD PARA PDF -->
-    <article class="tool-card">
-        <div class="tool-icon icon-blue">📝</div>
-
-        <h3>Word para PDF</h3>
-
-        <p>Converta documentos do Word para arquivos PDF.</p>
-
-        <div class="drop-area">
-            <strong>+ Selecionar documento Word</strong>
-            <span>Arquivos DOCX</span>
-
-            <input
-                type="file"
-                id="wordFile"
-                accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            >
-        </div>
-
-        <span class="file-info" id="wordFileInfo">
-            Nenhum documento selecionado.
-        </span>
-
-        <button class="tool-button" id="wordButton">
-            Converter para PDF
-        </button>
-
-        <div class="tool-message" id="wordMessage"></div>
-    </article>
-
-<!-- COMPRIMIR PDF -->
-    <article class="tool-card">
-        <div class="tool-icon icon-green">🗜️</div>
-
-        <h3>Comprimir PDF</h3>
-
-        <p>Reduza o tamanho dos seus documentos PDF.</p>
-
-        <div class="drop-area">
-            <strong>+ Selecionar PDF</strong>
-            <span>Escolha o documento que deseja comprimir</span>
-
-            <input
-                type="file"
-                id="compressFile"
-                accept=".pdf,application/pdf"
-            >
-        </div>
-
-        <span class="file-info" id="compressFileInfo">
-            Nenhum PDF selecionado.
-        </span>
-
-        <label for="compressionLevel" style="display:block;margin-top:15px;font-size:13px;font-weight:600;">
-            Nível de compressão
-        </label>
-
-        <select id="compressionLevel"
-            style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;margin-top:8px;">
-
-            <option value="high">Alta qualidade</option>
-            <option value="medium" selected>Equilibrada</option>
-            <option value="low">Maior compressão</option>
-        </select>
-
-        <button class="tool-button" id="compressButton">
-            Comprimir PDF
-        </button>
-
-        <div class="tool-message" id="compressMessage"></div>
-    </article>
-
-    </section>
-
-    <div class="section-heading">
-        <h2>Divisão de documentos</h2>
-        <p>Escolha como deseja separar as páginas do seu PDF.</p>
-    </div>
-
-    <section class="split-section">
-
-        <div class="split-intro">
-            <h2>Como deseja dividir o documento?</h2>
-            <p>
-                Você pode gerar um arquivo para cada página ou criar
-                vários documentos a partir de intervalos personalizados.
-            </p>
-        </div>
-
-        <div class="split-options">
-
-            <button type="button" class="split-option active"
-                    id="individualOption">
-                <strong>📄 Separar todas as páginas</strong>
-                <span>
-                    Cada página será transformada em um PDF individual.
-                    Todos os arquivos serão entregues em um ZIP.
-                </span>
-            </button>
-
-            <button type="button" class="split-option"
-                    id="rangesOption">
-                <strong>📚 Dividir por intervalos</strong>
-                <span>
-                    Defina os intervalos e gere um PDF separado
-                    para cada grupo de páginas.
-                </span>
-            </button>
-
-        </div>
-
-        <div class="split-panel">
-
-            <div id="individualDescription">
-                <strong>Separação individual</strong>
-                <p class="split-help">
-                    Exemplo: um documento de 5 páginas será transformado
-                    em 5 arquivos PDF independentes.
-                </p>
-            </div>
-
-            <div id="rangesDescription" hidden>
-                <strong>Intervalos personalizados</strong>
-
-                <label for="pageRanges">Informe os intervalos</label>
-
-                <input
-                    type="text"
-                    id="pageRanges"
-                    placeholder="Ex.: 1-3, 4-7, 8-10"
-                >
-
-                <p class="split-help">
-                    Separe os intervalos por vírgula.
-                    Exemplo: 1-3, 4-7, 8-10.
-                    Cada intervalo gera um PDF independente.
-                </p>
-            </div>
-
-            <div class="split-summary" id="splitSummary">
-                Selecione um PDF acima para começar.
-            </div>
-
-            <button class="tool-button" id="splitButton">
-                Separar páginas
-            </button>
-
-            <div class="tool-message" id="splitMessage"></div>
-
-        </div>
-
-    </section>
-
-    <div class="privacy-note">
-        <span>🔒</span>
-        <div>
-            <strong>Privacidade dos documentos</strong>
-            Os arquivos são processados diretamente no navegador.
-            Eles não são enviados ao banco de dados do sistema.
-        </div>
-    </div>
-
+<body><main class="documents-container">
+<header class="documents-header"><div><h1>O que você precisa fazer?</h1><p>Escolha uma opção. Vamos ajudar você em cada etapa.</p></div><a class="back-link" href="./app.html">← Voltar ao início</a></header>
+<section class="intro"><h2>É simples e rápido 😊</h2><p class="hint">Primeiro, escolha a tarefa. Depois, selecione seu arquivo e clique no botão azul. Você não precisa saber nada de informática.</p></section>
+<section class="choices-wrap" id="choicesWrap"><p class="step-label">Passo 1 de 2 · Escolha o que deseja fazer</p><div class="choices">
+<button class="choice" data-tool="image" type="button"><span class="choice-icon">🖼️</span><span><strong>Transformar fotos em PDF</strong><small>Junte fotos ou imagens em um documento.</small></span></button>
+<button class="choice" data-tool="merge" type="button"><span class="choice-icon">📑</span><span><strong>Juntar documentos</strong><small>Coloque vários PDFs em um arquivo só.</small></span></button>
+<button class="choice" data-tool="split" type="button"><span class="choice-icon">✂️</span><span><strong>Separar páginas</strong><small>Retire páginas de um PDF ou divida em partes.</small></span></button>
+<button class="choice" data-tool="word" type="button"><span class="choice-icon">📝</span><span><strong>Transformar Word em PDF</strong><small>Converta um documento do Word.</small></span></button>
+<button class="choice" data-tool="compress" type="button"><span class="choice-icon">📦</span><span><strong>Diminuir tamanho do PDF</strong><small>Deixe o arquivo menor para enviar ou guardar.</small></span></button>
+</div></section>
+<section class="workspace" id="workspace" hidden aria-live="polite"><div class="workspace-top"><div><p class="step-label">Passo 2 de 2 · Selecione e finalize</p><h2 id="workspaceTitle">Sua tarefa</h2><p class="hint" id="workspaceHint"></p></div><button class="change-tool" id="changeTool" type="button">← Escolher outra tarefa</button></div>
+<article class="tool-card" id="imageTool" hidden><div class="guide"><span>1</span>Escolha uma ou mais imagens do seu aparelho.</div><div class="drop-area"><strong>Selecione suas fotos</strong><span>Você pode escolher várias de uma vez.</span><input type="file" id="imageFiles" accept="image/*" multiple aria-label="Escolher imagens"></div><span class="file-info" id="imageFileInfo">Nenhuma imagem selecionada.</span><div class="guide"><span>2</span>Clique para criar seu PDF.</div><button class="tool-button" id="imageToPdfButton">Criar meu PDF</button><div class="tool-message" id="imageMessage" role="status"></div></article>
+<article class="tool-card" id="mergeTool" hidden><div class="guide"><span>1</span>Escolha dois ou mais arquivos PDF.</div><div class="drop-area"><strong>Selecione os documentos</strong><span>Selecione pelo menos dois arquivos PDF.</span><input type="file" id="mergeFiles" accept=".pdf,application/pdf" multiple aria-label="Escolher PDFs para juntar"></div><span class="file-info" id="mergeFileInfo">Nenhum PDF selecionado.</span><div class="guide"><span>2</span>Clique para juntar os arquivos.</div><button class="tool-button" id="mergeButton">Juntar meus documentos</button><div class="tool-message" id="mergeMessage" role="status"></div></article>
+<article class="tool-card" id="splitTool" hidden><div class="guide"><span>1</span>Escolha o PDF que deseja separar.</div><div class="drop-area"><strong>Selecione o documento</strong><span>Escolha um arquivo PDF.</span><input type="file" id="splitFile" accept=".pdf,application/pdf" aria-label="Escolher PDF para separar"></div><span class="file-info" id="splitFileInfo">Nenhum PDF selecionado.</span></article>
+<section class="split-section" id="splitSection" hidden><div class="guide"><span>2</span>Escolha como quer separar as páginas.</div><div class="split-options"><button type="button" class="split-option active" id="individualOption"><strong>📄 Uma página por arquivo</strong><span>Exemplo: um PDF de 5 páginas vira 5 PDFs separados.</span></button><button type="button" class="split-option" id="rangesOption"><strong>📚 Separar por grupos de páginas</strong><span>Exemplo: páginas 1 a 3 em um arquivo e 4 a 7 em outro.</span></button></div><div class="split-panel"><div id="individualDescription"><strong>Uma página por arquivo</strong><p class="split-help">Os PDFs serão colocados em uma pasta compactada (ZIP), que você poderá abrir depois.</p></div><div id="rangesDescription" hidden><strong>Grupos de páginas</strong><label for="pageRanges">Quais páginas você quer juntar em cada grupo?</label><input type="text" id="pageRanges" placeholder="Exemplo: 1-3, 4-7"><p class="split-help">Digite o número inicial e final separados por um traço. Use vírgulas para separar os grupos.</p></div><div class="split-summary" id="splitSummary">Selecione um PDF para começar.</div><div class="guide"><span>3</span>Clique para separar o documento.</div><button class="tool-button" id="splitButton">Separar meu PDF</button><div class="tool-message" id="splitMessage" role="status"></div></div></section>
+<article class="tool-card" id="wordTool" hidden><div class="guide"><span>1</span>Escolha o documento do Word.</div><div class="drop-area"><strong>Selecione o documento</strong><span>Arquivo Word no formato DOCX.</span><input type="file" id="wordFile" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-label="Escolher documento Word"></div><span class="file-info" id="wordFileInfo">Nenhum documento selecionado.</span><div class="guide"><span>2</span>Clique para criar o PDF.</div><button class="tool-button" id="wordButton">Transformar em PDF</button><div class="tool-message" id="wordMessage" role="status"></div></article>
+<article class="tool-card" id="compressTool" hidden><div class="guide"><span>1</span>Escolha o PDF que deseja diminuir.</div><div class="drop-area"><strong>Selecione o documento</strong><span>Escolha um arquivo PDF.</span><input type="file" id="compressFile" accept=".pdf,application/pdf" aria-label="Escolher PDF para diminuir"></div><span class="file-info" id="compressFileInfo">Nenhum PDF selecionado.</span><label for="compressionLevel">Como deseja diminuir o arquivo?</label><select id="compressionLevel"><option value="high">Manter a melhor qualidade</option><option value="medium" selected>Equilibrado (recomendado)</option><option value="low">Tentar deixar o arquivo menor</option></select><div class="guide"><span>2</span>Clique para diminuir o arquivo.</div><button class="tool-button" id="compressButton">Diminuir meu PDF</button><div class="tool-message" id="compressMessage" role="status"></div></article>
+</section>
+<div class="privacy-note"><span aria-hidden="true">🔒</span><div><strong>Seus documentos ficam no seu aparelho</strong>As ferramentas processam os arquivos no navegador, sem enviá-los ao banco de dados do sistema.</div></div>
 </main>
-
+<script>
+(function(){
+const info={image:['Transformar fotos em PDF','Escolha as imagens e nós criamos o documento.'],merge:['Juntar documentos','Escolha os PDFs que deseja colocar no mesmo arquivo.'],split:['Separar páginas','Escolha um PDF e como deseja separar suas páginas.'],word:['Transformar Word em PDF','Escolha um documento Word para converter.'],compress:['Diminuir tamanho do PDF','Escolha um PDF e o tipo de redução desejado.']};
+const workspace=document.getElementById('workspace');const choices=document.getElementById('choicesWrap');
+function showTool(name){Object.keys(info).forEach(key=>{document.getElementById(key+'Tool').hidden=key!==name});document.getElementById('splitSection').hidden=name!=='split';document.getElementById('workspaceTitle').textContent=info[name][0];document.getElementById('workspaceHint').textContent=info[name][1];choices.hidden=true;workspace.hidden=false;workspace.scrollIntoView({behavior:'smooth',block:'start'});}
+document.querySelectorAll('[data-tool]').forEach(button=>button.addEventListener('click',()=>showTool(button.dataset.tool)));
+document.getElementById('changeTool').addEventListener('click',()=>{workspace.hidden=true;choices.hidden=false;choices.scrollIntoView({behavior:'smooth',block:'start'})});
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.3/dist/html2pdf.bundle.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.9.0/mammoth.browser.min.js"></script>
+<script>
+(()=>{
+ const configs={image:['imageFiles','imageToPdfButton'],merge:['mergeFiles','mergeButton'],split:['splitFile','splitButton'],word:['wordFile','wordButton'],compress:['compressFile','compressButton']};
+ const panel=document.createElement('section');panel.className='preview-panel';panel.hidden=true;panel.setAttribute('aria-live','polite');panel.innerHTML='<h3>👀 Confira seus arquivos</h3><p class="preview-subtitle" id="previewSubtitle">Veja se escolheu os documentos certos antes de continuar.</p><div id="previewItems" class="preview-items"></div><p class="preview-note" id="previewNote"></p><div class="preview-actions"><button type="button" class="preview-cancel" id="previewCancel">← Trocar arquivos</button><button type="button" class="preview-confirm" id="previewConfirm">✓ Está certo, continuar</button></div>';
+ document.getElementById('workspace').appendChild(panel);
+ const items=panel.querySelector('#previewItems'),note=panel.querySelector('#previewNote'),confirm=panel.querySelector('#previewConfirm');
+ let active=null, urls=[],renderToken=0;
+ const clear=()=>{renderToken++;urls.forEach(u=>URL.revokeObjectURL(u));urls=[];items.replaceChildren();panel.hidden=true;active=null;};
+ const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x;};
+ const size=n=>n<1048576?`${Math.max(1,Math.round(n/1024))} KB`:`${(n/1048576).toFixed(1)} MB`;
+ async function previewPdf(file,container,token){
+  if(!window.pdfjsLib){container.append(el('div','preview-fallback','📄'));return;}
+  try{const doc=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;if(token!==renderToken)return;const page=await doc.getPage(1);if(token!==renderToken)return;const viewport=page.getViewport({scale:1});const canvas=el('canvas');const scale=Math.min(1.5,260/viewport.width,210/viewport.height);const view=page.getViewport({scale});canvas.width=Math.ceil(view.width);canvas.height=Math.ceil(view.height);container.append(canvas);await page.render({canvasContext:canvas.getContext('2d'),viewport:view}).promise;container.append(el('small','',`${doc.numPages} página(s) · primeira página exibida`));}catch(e){container.append(el('div','preview-fallback','📄'));container.append(el('small','','Não foi possível mostrar a miniatura. Confira o nome do arquivo.'));}
+ }
+ async function show(tool){clear();active=tool;const [inputId]=configs[tool],files=[...document.getElementById(inputId).files];if(!files.length){alert('Primeiro, escolha um arquivo para continuar.');document.getElementById(inputId).focus();return;}
+  if(tool==='merge'&&files.length<2){alert('Escolha pelo menos dois PDFs para juntar.');return;}
+  if(tool==='split'&&document.getElementById('rangesOption').classList.contains('active')&&!document.getElementById('pageRanges').value.trim()){alert('Informe quais páginas deseja separar.');document.getElementById('pageRanges').focus();return;}
+  const token=renderToken;panel.hidden=false;panel.querySelector('#previewSubtitle').textContent=files.length===1?'Este é o arquivo que você escolheu:':`Você escolheu ${files.length} arquivos. Confira abaixo:`;
+  note.textContent=tool==='merge'?'Os documentos serão juntados na ordem mostrada. Para mudar a ordem, selecione novamente os arquivos.':tool==='split'?'A miniatura mostra a primeira página. Confira as opções de separação escolhidas acima.':tool==='compress'?'A miniatura é do arquivo original. O resultado pode ter qualidade diferente dependendo da redução.':'A prévia mostra o arquivo original antes da conversão. Confira o resultado após salvar.';
+  if(tool==='word'){
+    const box=el('div','preview-document');items.append(box);items.style.display='block';
+    if(window.mammoth){try{const result=await mammoth.extractRawText({arrayBuffer:await files[0].arrayBuffer()});if(token!==renderToken)return;box.textContent=(result.value||'Documento sem texto identificável').slice(0,3500);box.prepend(el('p','','Prévia do texto (sem a formatação original):'));}catch(e){box.textContent='Não foi possível mostrar o conteúdo. Verifique o nome do documento.';}}else box.textContent='Prévia de texto indisponível. Confira o nome do documento.';
+  }else{items.style.display='grid';for(const file of files.slice(0,12)){
+    const card=el('div','preview-item'),media=el('div');card.append(media);
+    if(tool==='image'){const img=el('img');img.alt='Prévia de '+file.name;const url=URL.createObjectURL(file);urls.push(url);img.src=url;media.append(img);}else previewPdf(file,media,token);
+    card.append(el('strong','',file.name),el('small','',size(file.size)));items.append(card);
+  }if(files.length>12)items.append(el('p','','E mais '+(files.length-12)+' arquivo(s).'));}
+  panel.scrollIntoView({behavior:'smooth',block:'start'});confirm.focus({preventScroll:true});
+ }
+ Object.entries(configs).forEach(([tool,[inputId,buttonId]])=>{
+   const button=document.getElementById(buttonId);if(!button)return;
+   // Intercepta somente o clique inicial; a confirmação libera o manipulador já existente em documentos.js.
+   button.addEventListener('click',e=>{if(button.dataset.previewApproved==='yes'){delete button.dataset.previewApproved;return;}e.preventDefault();e.stopImmediatePropagation();show(tool);},true);
+   document.getElementById(inputId).addEventListener('change',()=>{if(active===tool)clear();});
+ });
+ confirm.addEventListener('click',()=>{if(!active)return;const tool=active;clear();const button=document.getElementById(configs[tool][1]);button.dataset.previewApproved='yes';button.click();delete button.dataset.previewApproved;});
+ panel.querySelector('#previewCancel').addEventListener('click',()=>{const tool=active;clear();if(tool)document.getElementById(configs[tool][0]).click();});
+ document.getElementById('changeTool').addEventListener('click',clear);
+})();
+</script>
+<section id="finalResult" class="final-result" hidden aria-live="polite" aria-label="Resultado pronto">
+<h2>✅ Seu documento está pronto!</h2>
+<p>Confira o resultado abaixo. Se estiver tudo certo, clique no botão azul para guardar no seu aparelho.</p>
+<p id="finalSummary"></p><p id="finalWarning" class="final-warning" hidden></p>
+<div id="finalPreview"></div>
+<div class="final-actions"><button type="button" class="final-download" id="finalDownload">⬇ Baixar meu arquivo</button><button type="button" class="final-open" id="finalOpen">↗ Abrir em outra aba</button><button type="button" class="final-back" id="finalBack">← Voltar e corrigir</button></div>
+<p class="final-done" id="finalDownloaded" hidden>Download solicitado! Procure o arquivo na pasta Downloads do seu aparelho.</p>
+</section>
+<script>
+document.getElementById('finalBack').addEventListener('click',()=>{document.getElementById('finalResult').hidden=true;document.getElementById('workspace').scrollIntoView({behavior:'smooth'});});
+document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>{document.getElementById('finalResult').hidden=true;}));
+document.getElementById('changeTool').addEventListener('click',()=>{document.getElementById('finalResult').hidden=true;});
+</script>
 <script type="module" src="./assets/js/documentos.js"></script>
-
-</body>
-</html>
+</body></html>
